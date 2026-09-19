@@ -1,0 +1,90 @@
+* {
+    font-size: 16px;
+    color: black;
+}
+
+::selection {
+    color:black;
+}
+
+div {
+    display: flex; 
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 8px; 
+}
+
+.inputField {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.column {
+    justify-content: flex-start;
+    width: 500px;
+}
+
+.box {
+    height: 16px;
+    width: 16px; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    border: 2px solid black;
+    border-radius: 6px;
+}
+
+.code {
+    background-color: black;
+}
+
+.revealed {
+    background-color: white;
+}
+
+.nope {
+    background-color: white;
+}
+
+.mislocated {
+    background-color: yellow;
+}
+
+.matched {
+    background-color: green;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 8px;
+}
+
+.resultStr {
+    padding: 16px;
+    font-size: 36px;
+}
+
+button {
+    height: 48px;
+    width: 96px;
+    border-radius: 6px;
+    align-self: flex-end;
+}
+
+.resultbad {
+    background-color: red;
+    /* color: white; */
+}
+
+.resultgood {
+    background-color: green;
+    /* color: white; */
+}

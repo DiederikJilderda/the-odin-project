@@ -1,0 +1,31 @@
+body {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.one {
+  background: pink;
+  box-sizing: border-box;
+  border: 3px solid blue;
+  width: 90%;
+  margin-left: auto;
+  margin-right:auto;
+  padding: 25px;
+}
+
+.two {
+  background: lightblue;
+  border: 3px solid purple;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 50px;
+  margin-top: 15px
+}
+
+.three {
+  background: peachpuff;
+  border: 3px solid brown;
+  width: 200px;
+  padding: 25px;
+  margin-left: auto;
+}

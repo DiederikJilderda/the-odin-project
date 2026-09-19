@@ -1,0 +1,288 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('fonts/Roboto-Regular.woff2') format('woff2'),
+        url('fonts/Roboto-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --blue: #1992D4;
+    --lightblue: #D2E2EE;
+    --lightgrey: rgb(235,235,235);
+    --grey: #DEDFE1;
+    --darkgrey: #A0A1A3;
+    --yellow: #ECBD4A;
+}
+
+* {
+    font-family: Roboto;
+}
+
+body {
+    display: grid; 
+    grid-template-columns: 225px auto;
+}
+
+
+.dashboard {
+    display: grid;
+    grid-auto-rows: min-content;
+    gap: 32px;
+    padding: 16px;
+
+    background-color: var(--blue);
+    font-weight: bold; 
+}
+
+.dashboard img {
+    height: 1.5em; 
+    width: auto;  
+
+    filter: invert(100%) sepia(3%) saturate(319%) hue-rotate(341deg) brightness(116%) contrast(100%);
+    align-items: center;
+}
+
+.dashboard-header {
+    font-size: 20px;
+    color: white; 
+    align-items: center;
+}
+
+.dashboard-functions, 
+.dashboard-support {
+    display: grid; 
+    grid-auto-rows: min-content;
+    gap: 8px;
+}
+
+.dashboard-row {
+    font-size: 14px;
+    color: white;
+    padding: 2px; 
+}
+
+.dashboard-header, 
+.dashboard-row {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+
+
+.main {
+    display: grid; 
+    grid-auto-rows: min-content; 
+}
+
+.divider {
+    height: 16px; 
+    width: 100%;
+    background: linear-gradient(to bottom,var(--grey), var(--lightgrey));
+}
+
+.nav {
+    display: grid;
+    grid-auto-rows: min-content;
+    gap: 16px;
+    margin: 16px;
+}
+
+.nav  * {
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.nav-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-content {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+}
+
+.nav img {
+    height: 1em; 
+    width: auto;
+}
+
+.nav-content .big-icon {
+    height: 1.75em;
+    width: auto;
+}
+
+
+button {
+    background-color: var(--blue);
+    color: white;
+    font-size: 12px;
+    width: 80px;
+    height: 2em;
+    border: solid var(--blue) 1px;
+    border-radius: 1em;
+}
+
+input {
+    height: 1em;
+    width: auto; 
+    border: solid var(--darkgrey) 1px;
+    border-radius: 0.5em;
+    background-color: var(--grey);
+}
+
+.welcome {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.welcome-user {
+    font-size: 16px; 
+    font-weight: bold;
+}
+
+
+.content {
+    background-color: var(--lightgrey);
+
+    display: grid; 
+    grid-template-columns: 3fr 1fr;
+    gap: 16px;
+    padding: 0 16px 16px 16px;
+}
+
+.projects {
+    grid-area: 1/1/3/2;
+    display: grid;
+    grid-template: auto 1fr 1fr / 1fr 1fr 1fr;
+    gap: 16px;
+}
+
+.projects, 
+.trending {
+    margin-bottom: 36px;
+}
+
+.content-header {
+    grid-column: 1 / -1;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.project-card, 
+.announcements-card, 
+.trending-card {
+    box-shadow: 4px 4px 4px rgb(200,200,200,50%);
+}
+
+.project-card {
+    padding: 16px;
+    border-radius: 8px;
+    background-image: linear-gradient( 
+        to right, 
+        var(--yellow) 6px, 
+        white 6px
+    );
+
+    display: grid;
+    grid-template-rows: 1fr auto;
+
+    line-height: 1.5;
+}
+
+.card-header {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.card-content {
+    font-size: 12px;
+    color: darkgrey;
+}
+
+.card-icons {
+    display: flex; 
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.card-icons img {
+    margin-left: 1.5em;
+    height: 1em; 
+    width: auto;
+}
+
+
+.announcements {
+    grid-area: 1/2/2/3;
+    display: grid;
+    gap: 16px;
+}
+
+.announcements-card {
+    background-color: white;
+    padding: 16px;
+    line-height: 1.5;
+    border-radius: 6px;
+}
+
+.announcements-header{ 
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.announcements-content {
+    font-size: 12px;
+    color: darkgrey;
+}
+
+.announcements-break {
+    height: 2px;
+    background-color: var(--lightgrey);
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+
+.trending {
+    grid-area: 2/2/3/3;
+    display: grid; 
+    grid-template-rows: auto, repeat(4, 1fr);
+    gap: 16px;
+}
+
+.trending-card {
+    padding: 16px;
+    border-radius: 8px; 
+    background-color: white; 
+    display: grid;
+    grid-template-rows: auto;
+    gap: 16px;
+}
+
+.trending-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    line-height: 1.5;
+}
+
+.trending-card img {
+    height: 1.5em;
+    width: auto;
+    margin-right: 16px;
+}
+
+.trending .user-at {
+    font-size: 12px;
+    color: black;
+}
+
+.trending .user-subtitle {
+    font-size: 12px;
+    color: var(--darkgrey);
+}

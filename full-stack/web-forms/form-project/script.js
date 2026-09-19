@@ -1,0 +1,1 @@
+const passwordFields = document.querySelector("password")

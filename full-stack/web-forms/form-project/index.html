@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up form</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-banner">
+            <img class="odin-logo" src="images/odin-lined.png">
+            <sdiv>Odin</div>
+        <div class="sidebar-footer">Image by <a href="https://unsplash.com/@haliewestphoto">Halie West</a> 
+            on <a href="https://unsplash.com/photos/green-leaf-plant-in-close-up-photography-25xggax4bSA">Unsplash</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="main-header">
+            <div>
+                This is not a real online service! 
+                You know you need something like this in your life to help you realise your deepest dreams. 
+                Sign up <em>now</em> to get started.
+            <br><br>
+                You <em>know</em> you want to.
+            </div>
+        </div>
+
+        <form id="form">
+            <div class="main-title">Let's do this!</div>
+            <div class="form-row">
+                <div class="input-unit">
+                    <label for="first-name">FIRST NAME</label>
+                    <input type="text" id="first-name" name="first-name" required>
+                </div>
+                <div class="input-unit">
+                    <label for="last-name">LAST NAME</label>
+                    <input type="text" id="last-name" name="last-name" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-unit">
+                    <label for="email">EMAIL</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-unit">
+                    <label for="phone">PHONE NUMBER</label>
+                    <input type="text" id="phone" name="phone">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-unit">
+                    <label for="password">PASSWORD</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="input-unit">
+                    <label for="password-confirm">CONFIRM PASSWORD</label>
+                    <input typegi="password" id="password-confirm" name="password-confirm" required>
+                </div>
+            </div>
+        </form>
+
+        <div class="line"></div>
+
+        <button action="get" type="submit" form="form">Create Account</button>
+
+        <div class="main-footer">
+            Already have an account? <span class="login">Log in</span>
+        </div>
+</body>
+</html>

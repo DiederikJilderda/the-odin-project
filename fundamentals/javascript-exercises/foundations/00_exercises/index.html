@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // Exercise 05: Copy and sort array 
+        let arr = ["HTML", "JavaScript", "CSS"];
+
+        function copySorted(arr) {
+            return arr.toSorted();
+        }
+        let sorted = copySorted(arr); 
+        console.log("Exercise 05: " + sorted);
+        console.log(arr);
+
+
+        // Exercise 06: Shuffle an array 
+        arr = [1, 2, 3];
+
+        function shuffle(arr) {
+            return arr.toSorted(() => 0.5 - Math.random());
+        }
+        console.log("Exercise 06: " + shuffle(arr)); 
+
+
+        // Exercise 07: Filter unique array members
+        arr = [3, 5, 1, 8, 5, 6, 1, 1]; 
+        
+        function unique(){
+            return arr.filter((item,index) => arr.findIndex((num) => num == item) == index);
+        }
+        console.log("Exercise 07: " + unique(arr)); 
+
+    </script>
+</body>
+</html>

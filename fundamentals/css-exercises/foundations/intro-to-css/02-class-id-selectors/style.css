@@ -1,0 +1,19 @@
+.main {
+    background-color: rgb(189, 149, 149);
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.large {
+    font-size: 24px;
+}
+
+#blue-text {
+    color: blue;
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+#green-bg {
+    background-color: green;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+}

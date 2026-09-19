@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let a = 3; 
+        let b = 5; 
+
+        function testfunction(a, b) {
+            values = [a,b].sort((a,b) => a - b);
+            if (Number.isInteger(a) && Number.isInteger(b) && a >= 0 && b >= 0) {
+                sumFunction(values[0],values[1]);
+            }
+            else {
+                console.log('error');
+                return 'ERROR';
+            }
+            
+            function sumFunction(a,b) {
+                let num = 0; 
+                for (let i = a ; i <= b ; i++){
+                    num += i;
+                } 
+                console.log(num);
+            }
+        }  
+
+        testfunction(a,b);
+
+        // npm test removeFromArray.spec.js
+    </script>
+</body>
+</html>

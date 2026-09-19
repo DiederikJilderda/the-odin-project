@@ -1,0 +1,50 @@
+/* General setup */
+@font-face {
+    font-family: 'Marker';
+    src: url('fonts/PermanentMarker-Regular.woff2') format('woff2'),
+        url('fonts/PermanentMarker-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Playwrite';
+    src: url('fonts/PlaywriteAUVICGuides-Regular.woff2') format('woff2'),
+        url('fonts/PlaywriteAUVICGuides-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+html {
+  font-size: 10px;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+body {
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Typography */
+
+h1 {
+  font-family: 'Marker', serif;
+  font-size: 3.2rem;
+}
+
+h2 {
+  font-family: 'Marker', serif;
+  font-size: 2.4rem;
+}
+
+p {
+  /* font-family: 'Playwrite', sans-serif; */
+  font-family: 'Cause', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.6;
+  word-spacing: 0.6rem;
+}
