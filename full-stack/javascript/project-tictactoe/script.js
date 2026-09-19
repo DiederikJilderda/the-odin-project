@@ -75,6 +75,8 @@ const game = (() => {
                 }
             }
 
+            // write alternative draw check with board[column].every() method
+
             if (draw === true) {
                 console.log("this game is a draw");}
             else {
@@ -86,7 +88,8 @@ const game = (() => {
     function makeMove(column, row) {
         if (board[column][row].state === null) { 
             board[column][row].state = player[playerIndex].marker;
- 
+            // newCell.textContent = player[playerIndex].marker;
+
             evaluateMove(column, row);
             console.log(game.board);
         }
@@ -100,3 +103,89 @@ const game = (() => {
     return {board, player, makeMove}
 })();
 
+
+
+const main = document.querySelector(".main");
+const inputX = document.querySelector("#input-X"); 
+const inputO = document.querySelector("#input-O"); 
+
+
+const newGameButton = document.querySelector(".button-new");
+newGameButton.addEventListener("click", () => {   
+    constructDisplay(inputX.value, inputO.value);
+    inputX.textContent = "";
+    inputO.textContent = "";
+    }
+)
+    
+function constructDisplay(nameX, nameO) {
+    //create game instance container 
+    const gameInstance = document.createElement("div");
+    gameInstance.classList.add("game-instance");
+    main.appendChild(gameInstance);
+
+    //create game header 
+    const gameHeader = document.createElement("div");
+    const boardContainer = document.createElement("div");
+    gameHeader.classList.add("game-header");
+    boardContainer.classList.add("board");
+    // boardContainer.textContent = "grid";
+    gameInstance.appendChild(gameHeader);
+    gameInstance.appendChild(boardContainer);
+
+    //create header elements 
+    const playerScoreX = document.createElement("div");
+    const playerScoreO = document.createElement("div");
+    const removeButton = document.createElement("button");
+    playerScoreX.classList.add("player-score");
+    playerScoreO.classList.add("player-score");
+    removeButton.classList.add("button-delete");
+    playerScoreX.textContent = nameX + " has a score of 4";
+    playerScoreO.textContent = nameO + " has a score of 3";
+    removeButton.textContent = "X";
+    gameHeader.appendChild(playerScoreX);
+    gameHeader.appendChild(playerScoreO);
+    gameHeader.appendChild(removeButton);
+
+    //create grid 
+
+    function cellObject(row, column) {
+        let state = null; 
+        return {column, row, state};
+    }
+
+    let board = []; 
+    for (i=0 ; i<3 ; i++){
+        board.push([]);
+        for (j=0 ; j<3 ; j++) {
+            let newCellObject = new cellObject(i,j);
+            const newCell = document.createElement("div");
+
+            newCell.classList.add("cell");
+            board[i].push(newCellObject)
+            newCell.textContent = "00";
+            boardContainer.appendChild(newCell);
+
+            newCell.addEventListener("click", () => game.makeMove(newCellObject.row, newCellObject.column));
+        }
+    }
+
+}
+
+function deleteDisplay() {
+    return 
+}
+
+
+
+
+
+// press new game button 
+// read player names and type 
+
+// create new game instance 
+// within game instance create header and grid 
+// within grid create cells and cellobjects 
+// attach eventlistener to cellobjects 
+
+// click cell, run game.makeMove(cell.column, cell.row)
