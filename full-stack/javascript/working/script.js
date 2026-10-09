@@ -1,46 +1,25 @@
-// function outer() {
-//   const outerVar = "I'm the outer var";
 
-//   function inner() {
-//     const innerVar = "hey I'm an inner var";
-//     console.log(innerVar);
-//     console.log(outerVar);
-//   }
+let l1 = [3, 0, 4];
+let l2 = [5, 6, 2, 1];
 
-//   return inner; 
-// }
+const addTwoNumbers = function(l1, l2) {
+    let totalVal = 0; 
+    let lists = [l1,l2];
 
-// const innerFn = outer();
+    for (list of lists) {
+        for (i = 0; i<list.length ; i++) {
+            totalVal += list[i] * (10**i);
+        }
+    }
+    console.log(totalVal);
 
-// innerFn();
+    let sumArr = []; 
 
+    for (let i=0 ; i<totalVal.toString.length ; i++) {
+        sumArr.unshift(totalVal.toString[i]);
+    }
 
-// function createGreeting(greeting = "") {
-//   const myGreet = greeting.toUpperCase();
+    return sumArr;
+};
 
-//   return function(name) {
-//     return myGreet + " " + name;
-//   }
-// }
-
-// const sayHello = createGreeting("hello");
-// console.log(sayHello("wes"));
-
-
-function createGame(gameName) {
-  let score = 0; 
-
-  return function win(){
-    score ++; 
-    return "Your name " + gameName + " score is " + score;    
-  }
-}
-
-const hockeyGame = createGame('Hockey');
-const footballGame = createGame('Football');
-
-
-// hockeyGame();
-// hockeyGame();
-
-// console.log(hockeyGame);
+console.log(addTwoNumbers(l1,l2));

@@ -103,27 +103,38 @@ function constructDisplay() {
     boardContainer.classList.add("board");
     instanceContainer.appendChild(boardContainer);
 
-    //create grid 
-    function cellObject(row, column) {
-        let state = null; 
+    //cell object 
+    function cellObject(column, row) {
+        // let state = null;
+        let state = "XO"; 
+
         return {column, row, state};
     }
 
-    let board = []; 
-    for (i=0 ; i<3 ; i++){
-        board.push([]);
-        for (j=0 ; j<3 ; j++) {
-            let newCellObject = new cellObject(i,j);
-            const newCell = document.createElement("div");
-
-            newCell.classList.add("cell");
-            board[i].push(newCellObject)
-            newCell.textContent = "00";
-            boardContainer.appendChild(newCell);
-
-            newCell.addEventListener("click", () => game.makeMove(newCellObject.row, newCellObject.column));
-        }
+    // cell UI element 
+    function cellUI() {
+        let newCell = document.createElement("div");
+        newCell.classList.add("cell");
+        newCell.textContent = "00"; 
+        newCell.addEventListener("click", (e) => console.log("well done"));
     }
+
+
+    // let board = []; 
+    // for (i=0 ; i<3 ; i++){
+    //     board.push([]);
+    //     for (j=0 ; j<3 ; j++) {
+    //         let newCellObject = new cellObject(i,j);
+    //         const newCell = document.createElement("div");
+
+    //         newCell.classList.add("cell");
+    //         board[i].push(newCellObject)
+    //         newCell.textContent = "00";
+    //         boardContainer.appendChild(newCell);
+
+    //         newCell.addEventListener("click", () => game.makeMove(newCellObject.row, newCellObject.column));
+    //     }
+    // }
 
 }
 
