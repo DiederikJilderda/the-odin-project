@@ -9,71 +9,71 @@
 //         console.log("gamestate is reset");
 //     }
 
-//     function evaluateMove(column, row) {
-//         if ((board[column][0].state === board[column][1].state &&
-//             board[column][0].state === board[column][2].state &&
-//             board[column][0].state !== null)
-//             ||
-//             (board[0][row].state === board[1][row].state &&
-//             board[0][row].state === board[2][row].state &&
-//             board[0][row].state !== null)
-//             ||
-//             (column === row &&
-//             board[1][1].state === board[0][0].state &&
-//             board[1][1].state === board[2][2].state &&
-//             board[1][1].state !== null)
-//             ||
-//             (column + row === 2 &&
-//             board[1][1].state === board[2][0].state &&
-//             board[1][1].state === board[0][2].state &&
-//             board[1][1].state !== null)) 
-            
-//             {
-//                 player[playerIndex].addScore();
-//                 console.log(player[playerIndex] + ", you win!");    
-//                 resetGame();          
-//             }
+   
+function testfunction(row,column) {
+    console.log([row,column]);
+    console.log(player);
+}
 
-//         else {
-//             let draw = true; 
-//             for (i=0 ; i<3 ; i++){
-//                 for (j=0 ; j<3 ; j++){
-//                     if (board[i][j].state === null) {
-//                         draw = false;
-//                     }
-//                 }
-//             }
+function evaluateMove(column, row) {
+    if ((board[column][0].state === board[column][1].state &&
+        board[column][0].state === board[column][2].state &&
+        board[column][0].state !== null)
+        ||
+        (board[0][row].state === board[1][row].state &&
+        board[0][row].state === board[2][row].state &&
+        board[0][row].state !== null)
+        ||
+        (column === row &&
+        board[1][1].state === board[0][0].state &&
+        board[1][1].state === board[2][2].state &&
+        board[1][1].state !== null)
+        ||
+        (column + row === 2 &&
+        board[1][1].state === board[2][0].state &&
+        board[1][1].state === board[0][2].state &&
+        board[1][1].state !== null)) 
+        
+        {
+            player[playerIndex].addScore();
+            console.log(player[playerIndex] + ", you win!");    
+            resetGame();          
+        }
 
-//             // write alternative draw check with board[column].every() method
+    else {
+        let draw = true; 
+        for (i=0 ; i<3 ; i++){
+            for (j=0 ; j<3 ; j++){
+                if (board[i][j].state === null) {
+                    draw = false;
+                }
+            }
+        }
 
-//             if (draw === true) {
-//                 console.log("this game is a draw");}
-//             else {
-//                 playerIndex = player[playerIndex].nextPlayerIndex;}
-//         }
-//     }
-    
+        // write alternative draw check with board[column].every() method
 
-//     function makeMove(column, row) {
-//         if (board[column][row].state === null) { 
-//             board[column][row].state = player[playerIndex].marker;
-//             // newCell.textContent = player[playerIndex].marker;
+        if (draw === true) {
+            console.log("this game is a draw");}
+        else {
+            playerIndex = player[playerIndex].nextPlayerIndex;}
+    }
+}
 
-//             evaluateMove(column, row);
-//             console.log(game.board);
-//         }
-//         else {
-//             console.log("this cell is already filled");
-//         }
-//     }
 
-//     return {board, player, makeMove}
-// })();
 
-// constructDisplay("Mark","Mark");    
-// function constructDisplay(nameX, nameO) {
+function makeMove(row,column) {
+    if (board[row][column].state === null) { 
+        board[row][column].state = player[playerIndex].marker;
 
-function constructDisplay() {
+        evaluateMove(row, column);
+        console.log(game.board);
+    }
+    else {
+        console.log("this cell is already filled");
+    }
+}
+
+function createGame(nameX, nameO) {
     //create game instance container 
     const instanceContainer = document.createElement("div");
     instanceContainer.classList.add("game-instance");
@@ -90,8 +90,8 @@ function constructDisplay() {
     playerScoreX.classList.add("player-score");
     playerScoreO.classList.add("player-score");
     removeButton.classList.add("button-delete");
-    playerScoreX.textContent = "MARK" + " has a score of 4";
-    playerScoreO.textContent = "JOSH" + " has a score of 3";
+    playerScoreX.textContent = nameX + " has a score of 4";
+    playerScoreO.textContent = nameO + " has a score of 3";
     removeButton.textContent = "X";
     headerContainer.appendChild(playerScoreX);
     headerContainer.appendChild(playerScoreO);
@@ -103,45 +103,24 @@ function constructDisplay() {
     boardContainer.classList.add("board");
     instanceContainer.appendChild(boardContainer);
 
-    //cell object 
-    function cellObject(column, row) {
-        // let state = null;
-        let state = "XO"; 
+    let board = []; 
+    for (let i=0 ; i<3 ; i++){
+        board.push([]);
+        for (let j=0 ; j<3 ; j++) {
+            let newCellObject = new cellObject(i,j);
+            const newCell = document.createElement("div");
 
-        return {column, row, state};
+            newCell.classList.add("cell");
+            board[i].push(newCellObject)
+            newCell.textContent = "";
+            boardContainer.appendChild(newCell);
+
+            // newCell.addEventListener("click", () => makeMove(i,j));
+            newCell.addEventListener("click", () => testfunction(i,j));
+        }
     }
-
-    // cell UI element 
-    function cellUI() {
-        let newCell = document.createElement("div");
-        newCell.classList.add("cell");
-        newCell.textContent = "00"; 
-        newCell.addEventListener("click", (e) => console.log("well done"));
-    }
-
-
-    // let board = []; 
-    // for (i=0 ; i<3 ; i++){
-    //     board.push([]);
-    //     for (j=0 ; j<3 ; j++) {
-    //         let newCellObject = new cellObject(i,j);
-    //         const newCell = document.createElement("div");
-
-    //         newCell.classList.add("cell");
-    //         board[i].push(newCellObject)
-    //         newCell.textContent = "00";
-    //         boardContainer.appendChild(newCell);
-
-    //         newCell.addEventListener("click", () => game.makeMove(newCellObject.row, newCellObject.column));
-    //     }
-    // }
-
+    return board;
 }
-
-
-
-
-
 
 
 // player object constructor 
@@ -156,50 +135,42 @@ function createPlayer(name, marker, nextPlayerIndex) {
 }
 
 // cell object constructor 
-function cellObject(column, row) {
+function cellObject(row, column) {
     let state = null; 
-    // this.addEventListener("click", () => console.log(column + " " + row));
-    // this.addEventListener("click", () => makeMove(column, row));
-    return {column, row, state};
-}
-
-// board object constructor  
-function createBoard() {
-    let board = []; 
-    for (i=0 ; i<3 ; i++){
-        board.push([]);
-        for (j=0 ; j<3 ; j++) {
-            board[i].push(cellObject(i, j))
-            // cellObject(i,j).addEventListener("click", () => console.log(this.column));
-        }
-    }
-    return board; 
+    return {row, column, state};
 }
 
 
-// new game: function 
-function newGame(nameX, nameO) {
+
+// create new game instance  
+function gameInstance(nameX, nameO) {
     // create player instances 
     const player = [createPlayer(nameX, "X", 1), 
                     createPlayer(nameO, "O", 0)];
     let playerIndex = 0;
 
     // create board instance 
-    let board = createBoard();
+    let board = createGame(nameX, nameO);
 
     return {player, board};
 }
 
-// new game: 
+// initialise game 
 const main = document.querySelector(".main");
 const inputX = document.querySelector("#input-X"); 
 const inputO = document.querySelector("#input-O"); 
-let gameInstance = [];
+let activeGames = [];
 
 const newGameButton = document.querySelector(".button-new");
 newGameButton.addEventListener("click", () => {  
-    gameInstance.push(newGame(inputX.value, inputO.value));
-    // inputX.value = "";
-    // inputO.value = "";
+    activeGames.push(gameInstance(inputX.value, inputO.value));
+    inputX.value = "";
+    inputO.value = "";
+    console.log(activeGames)
     }
+
 )
+
+// starting game 
+activeGames.push(gameInstance("Brendan", "Conor"));
+console.log(activeGames)
