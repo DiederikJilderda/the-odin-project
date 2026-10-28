@@ -1,6 +1,8 @@
 :root {
-    --typical-radius: 1em; 
-    --main-grey: rgb(240,240,240); 
+    --typical-radius: 0.5em; 
+    --light-grey: rgb(240,240,240); 
+    --main-color: rgb(200,180,100);
+    --width: 30rem;
 }
 
 * {
@@ -9,54 +11,108 @@
 }
 
 body {
-    margin: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-nav, 
-.content {
-    width: 540px;
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5em;
+header {
+    width: 100%; 
+    margin-bottom: 3rem; 
 }
 
-.content {
-    height: 500px;
-    background-color: var(--main-grey);
+nav {
+    height: 2rem; 
+    background-color: var(--light-grey); 
+    display: flex; 
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 button {
-    height: 1.5rem; 
-    width: 100%;
-
-    border: lightgray solid 0.5px;
-    border-bottom: none;
-
-    color: grey;
-    background-color: white;
-}
-
-.button-left {
-    border-top-left-radius: var(--typical-radius);
-    border-right: none;
-}
-
-.button-mid {
-    border-left: none;
-    border-right: none;
-}
-
-.button-right {
-    border-top-right-radius: var(--typical-radius);
-    border-left: none;
-}
-
-button:hover {
+    cursor: pointer; 
+    height: 2rem;
+    width: calc(var(--width)/3);
+    border: none;
     color: gray;
-    background-color: var(--main-grey);
-    border: none; 
 }
 
+button:hover,
+.active {
+    background-color: white;
+    color: var(--main-color);
+    border-bottom: solid 2px var(--main-color);
+}
+
+.content {
+    width: var(--width);
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+}
+
+.home-title {
+    color: var(--main-color);
+    font-size: 20px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+.home-text {
+    text-align: center;
+    color: gray;
+    font-size: 16px; 
+    line-height: 1.25em;
+}
+
+img {
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+}
+
+.card {
+    margin-bottom: 1rem; 
+    width: 100%;
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem; 
+}
+
+.top {
+    display: flex; 
+    flex-direction: row;
+    justify-content: flex-start; 
+    align-items: center;
+
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.flag {
+    height: 1.25em; 
+    width: auto;
+}
+
+.dish, 
+.price {
+    font-size: 18px; 
+}
+
+.dish {
+    color: var(--main-color); 
+    text-align: center;
+}
+
+.price {
+    justify-self: flex-end;
+    color: gray;
+    margin-left: auto;
+}
+
+.description {
+    font-size: 14px;
+    color: gray;
+    line-height: 1.25em;
+}
