@@ -1,5 +1,4 @@
-import flagImg from "./images/south-africa.png";
-import photoImg from "./images/bobotie.jpg";
+import { courses } from "./courses.js";
 
 const food = function() {
     const content = document.querySelector(".content"); 
@@ -14,7 +13,7 @@ const food = function() {
     const left = document.createElement("div");
     const photo = document.createElement("img"); 
     photo.classList.add("img-dish"); 
-    photo.src = photoImg;
+    photo.src = "./images/bobotie.jpg";
     card.append(left, photo); 
 
 
@@ -30,7 +29,7 @@ const food = function() {
     // append flag, dish and price to header 
     const country = document.createElement("img"); 
     country.classList.add("flag"); 
-    country.src = flagImg; 
+    country.src = "./images/south-africa.png"; 
     const dish = document.createElement("div"); 
     dish.classList.add("dish"); 
     dish.textContent = "BOBOTIE"; 
@@ -39,6 +38,5 @@ const food = function() {
     price.textContent = "$15"; 
     top.append(country, dish, price); 
 }
-
 
 export { food }; 
