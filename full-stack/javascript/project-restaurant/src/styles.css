@@ -22,28 +22,46 @@ header {
 }
 
 nav {
-    height: 2rem; 
+    height: 2.5rem; 
     background-color: var(--light-grey); 
     display: flex; 
     flex-direction: row;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
 }
 
 button {
     cursor: pointer; 
-    height: 2rem;
+    height: 2.5rem;
     width: calc(var(--width)/3);
     border: none;
     color: gray;
+    letter-spacing: 0.1em;
 }
 
-button:hover,
+button:hover {
+    /* background-color: white; */
+    /* color: gray; */
+    border-bottom: solid 2px var(--main-color);
+}
+
 .active {
     background-color: white;
     color: var(--main-color);
     border-bottom: solid 2px var(--main-color);
 }
+
+/* .button-home {
+    text-align: left;
+}
+
+.button-food {
+    text-align: center;
+}
+
+.button-contact {
+    text-align: right;
+} */
 
 .content {
     width: var(--width);
@@ -52,24 +70,44 @@ button:hover,
     justify-content: center;
 }
 
-.home-title {
+.home-title, 
+.contact-title, 
+.category {
     color: var(--main-color);
     font-size: 20px;
     letter-spacing: 4px;
+}
+
+.home-title, 
+.home-text {
     text-align: center;
 }
 
-.home-text {
-    text-align: center;
+.contact-title {
+    margin-bottom: 1rem;
+}
+
+.home-text, 
+.contact-text {
     color: gray;
     font-size: 16px; 
     line-height: 1.25em;
+    margin-bottom: 1rem;
 }
 
 img {
     width: 100%;
     height: auto; 
     object-fit: cover;
+}
+
+img.img-home {
+    margin-left: -1.25rem;
+}
+
+img.img-me {
+    margin-top: 0.25rem;
+    margin-left: 0.5rem;
 }
 
 .card {
@@ -116,3 +154,4 @@ img {
     color: gray;
     line-height: 1.25em;
 }
+

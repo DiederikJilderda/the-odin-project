@@ -5,7 +5,7 @@ const home = function() {
 
     const title = document.createElement("div");
     title.classList.add("home-title"); 
-    title.innerText = "ICONIC DISHES, \n FROM PLANET EARTH";
+    title.innerText = "ICONIC DISHES \n FROM PLANET EARTH";
 
     const imgHome = document.createElement("img"); 
     imgHome.classList.add("img-home");

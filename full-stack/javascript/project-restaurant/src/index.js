@@ -4,13 +4,14 @@ import { food } from "./food.js";
 import { contact } from "./contact.js"; 
 import { clear } from "./clear.js";
 
-home();
 
 // eventlisteners 
 const homeButton = document.querySelector(".button-home");
 const foodButton = document.querySelector(".button-food");
 const contactButton = document.querySelector(".button-contact");
 
+
+// button events 
 homeButton.addEventListener("click", () => {
     homeButton.classList.add("active");
     foodButton.classList.remove("active");
@@ -34,3 +35,8 @@ contactButton.addEventListener("click", () => {
     clear(); 
     contact();
 });
+
+
+// initial load 
+home();
+homeButton.classList.add("active");
