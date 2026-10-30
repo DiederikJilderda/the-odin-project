@@ -1,6 +1,6 @@
 import earth from "./images/earth.jpg"; 
 
-const home = function() {
+const homePage = function() {
     const content = document.querySelector(".content"); 
 
     const title = document.createElement("div");
@@ -13,11 +13,11 @@ const home = function() {
 
     const welcome = document.createElement("div"); 
     welcome.classList.add("home-text"); 
-    welcome.textContent = "Welcome to Didi's restaurant full of food from Earth! Here you can find some the most iconic dishes from countries all over the world. Bon appetit!";
+    welcome.textContent = "Welcome to Benji's restaurant full of food from planet Earth! Here you can find some the most iconic dishes from countries all over the world. Bon appetit!";
 
     content.appendChild(title);
     content.appendChild(imgHome); 
     content.appendChild(welcome); 
 }
 
-export { home };
+export { homePage };

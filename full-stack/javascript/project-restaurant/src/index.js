@@ -1,8 +1,8 @@
 import "./styles.css";
-import { home } from "./home.js"; 
-import { food } from "./food.js"; 
-import { contact } from "./contact.js"; 
-import { clear } from "./clear.js";
+import { homePage } from "./homePage.js"; 
+import { foodPage } from "./foodPage.js"; 
+import { aboutPage } from "./aboutPage.js"; 
+import { clearPage } from "./clearPage.js";
 
 
 // eventlisteners 
@@ -16,27 +16,27 @@ homeButton.addEventListener("click", () => {
     homeButton.classList.add("active");
     foodButton.classList.remove("active");
     contactButton.classList.remove("active");
-    clear(); 
-    home();
+    clearPage(); 
+    homePage();
 });
 
 foodButton.addEventListener("click", () => {
     homeButton.classList.remove("active");
     foodButton.classList.add("active");
     contactButton.classList.remove("active");
-    clear(); 
-    food();
+    clearPage(); 
+    foodPage();
 });
 
 contactButton.addEventListener("click", () => {
     homeButton.classList.remove("active");
     foodButton.classList.remove("active");
     contactButton.classList.add("active");
-    clear(); 
-    contact();
+    clearPage(); 
+    aboutPage();
 });
 
 
 // initial load 
-home();
+homePage();
 homeButton.classList.add("active");

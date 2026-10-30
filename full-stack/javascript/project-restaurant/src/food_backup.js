@@ -63,3 +63,23 @@ const food = function(bobotie) {
 
 
 export { food }; 
+
+
+
+
+
+// const flagChina = "./images/china.jpg"; 
+// const flagFrance = "./images/france.jpg"; 
+// const flagSouthAfrica = "./images/south-africa.png"; 
+// const flagSpain = "./images/spain.jpg"; 
+// const flagSriLanka = "./images/sri lanka.jpg"; 
+// const flagUkraine = "./images/ukraine.jpg"; 
+// const flagUSA = "./images/usa.jpg"; 
+
+// const courseBobotie = "./images/bobotie.jpg";
+// const courseBorscht = "./images/borscht.jpg";
+// const courseGazpacho = "./images/gazpacho.jpg";
+// const courseJambalaya = "./images/jambalaya.jpg";
+// const courseMapoTofu = "./images/mapo tofu.jpg";
+// const courseNicoise = "./images/nicoise.jpg";
+// const courseWatalappan = "./images/watalappan.jpeg";

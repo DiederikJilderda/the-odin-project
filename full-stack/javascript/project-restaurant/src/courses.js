@@ -1,47 +1,75 @@
-// import flagChina from "./images/china.jpg"; 
-// import flagFrance from "./images/france.jpg"; 
-// import flagSouthAfrica from "./images/south-africa.png"; 
-// import flagSpain from "./images/spain.jpg"; 
-// import flagSriLanka from "./images/sri lanka.jpg"; 
-// import flagUkraine from "./images/ukraine.jpg"; 
-// import flagUSA from "./images/usa.jpg"; 
+import flagChina from "./images/china.jpg"; 
+import flagFrance from "./images/france.jpg"; 
+import flagSouthAfrica from "./images/south-africa.png"; 
+import flagSpain from "./images/spain.jpg"; 
+import flagSriLanka from "./images/sri lanka.jpg"; 
+import flagUkraine from "./images/ukraine.jpg"; 
+import flagUSA from "./images/usa.jpg"; 
 
-// import courseBobotie from "./images/bobotie.jpg";
-// import courseBorscht from "./images/borscht.jpg";
-// import courseGazpacho from "./images/gazpacho.jpg";
-// import courseJambalaya from "./images/jambalaya.jpg";
-// import courseMapoTofu from "./images/mapo tofu.jpg";
-// import courseNicoise from "./images/nicoise.jpg";
-// import courseWatalappan from "./images/watalappan.jpeg";
+import courseBobotie from "./images/bobotie.jpg";
+import courseBorscht from "./images/borscht.jpg";
+import courseGazpacho from "./images/gazpacho.jpg";
+import courseJambalaya from "./images/jambalaya.jpg";
+import courseMapoTofu from "./images/mapo tofu.jpg";
+import courseNicoise from "./images/nicoise.jpg";
+import courseWatalappan from "./images/watalappan.jpeg"; 
 
-const flagChina = "./images/china.jpg"; 
-const flagFrance = "./images/france.jpg"; 
-const flagSouthAfrica = "./images/south-africa.png"; 
-const flagSpain = "./images/spain.jpg"; 
-const flagSriLanka = "./images/sri lanka.jpg"; 
-const flagUkraine = "./images/ukraine.jpg"; 
-const flagUSA = "./images/usa.jpg"; 
 
-const courseBobotie = "./images/bobotie.jpg";
-const courseBorscht = "./images/borscht.jpg";
-const courseGazpacho = "./images/gazpacho.jpg";
-const courseJambalaya = "./images/jambalaya.jpg";
-const courseMapoTofu = "./images/mapo tofu.jpg";
-const courseNicoise = "./images/nicoise.jpg";
-const courseWatalappan = "./images/watalappan.jpeg";
-
-let courses = []; 
+let allCourses = []; 
 
 class Course {
     constructor(course, description, price, flag, photo, cat) {
-        this.course = course; 
+        this.course = course.toUpperCase(); 
         this.description = description; 
         this.price = price; 
         this.flag = flag; 
         this.photo = photo;
         this.cat = cat; 
 
-        courses.push(this);
+        this.addCourse(); 
+    }
+
+    addCourse() {
+        allCourses.push(this);
+    }
+
+    createCard() {
+        const courseType = document.querySelector("." + this.type);
+    
+        // append card element 
+        const card = document.createElement("div"); 
+        card.classList.add("card"); 
+        courseType.append(card); 
+
+
+        // append left div and right photo 
+        const left = document.createElement("div");
+        const photo = document.createElement("img"); 
+        photo.classList.add("img-dish"); 
+        photo.src = this.photo;                             // course photo
+        card.append(left, photo); 
+
+
+        // append header and description  
+        const top = document.createElement("div"); 
+        top.classList.add("top");
+        const description = document.createElement("div");
+        description.classList.add("description"); 
+        description.textContent = this.description;         // course description 
+        left.append(top, description); 
+
+
+        // append flag, dish and price to header 
+        const country = document.createElement("img"); 
+        country.classList.add("flag"); 
+        country.src = this.flag;                            // course flag  
+        const dish = document.createElement("div"); 
+        dish.classList.add("dish"); 
+        dish.textContent = this.course;                     // course name 
+        const price = document.createElement("div"); 
+        price.classList.add("price"); 
+        price.textContent = this.price;                     // course price 
+        top.append(country, dish, price); 
     }
 }
 
@@ -56,7 +84,7 @@ const mapoTofu = new Course (
 );
 
 const nicoise = new Course (
-    "SALADE NICOISE", 
+    "SALADE nicoise", 
     "Nice salad.", 
     "£8.50", 
     flagFrance, 
@@ -109,48 +137,4 @@ const jambalaya = new Course (
     "main"
 ); 
 
-const display = function(course) {
-    const content = document.querySelector(".content"); 
-    
-    // append card element 
-    const card = document.createElement("div"); 
-    card.classList.add("card"); 
-    content.appendChild(card); 
-
-
-    // append left div and right photo 
-    const left = document.createElement("div");
-    const photo = document.createElement("img"); 
-    photo.classList.add("img-dish"); 
-    photo.src = course.photo;
-    card.append(left, photo); 
-
-
-    // append header and description  
-    const top = document.createElement("div"); 
-    top.classList.add("top");
-    const description = document.createElement("div");
-    description.classList.add("description"); 
-    description.textContent = course.description;
-    left.append(top, description); 
-
-
-    // append flag, dish and price to header 
-    const country = document.createElement("img"); 
-    country.classList.add("flag"); 
-    country.src = course.flag; 
-    const dish = document.createElement("div"); 
-    dish.classList.add("dish"); 
-    dish.textContent = course.course; 
-    const price = document.createElement("div"); 
-    price.classList.add("price"); 
-    price.textContent = course.price; 
-    top.append(country, dish, price); 
-}
-
-
-display(bobotie);
-display(mapoTofu);
-display(jambalaya);
-
-// export { courses }; 
+export { allCourses }; 
