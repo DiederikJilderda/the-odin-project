@@ -4,64 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <script src="todolist.js" defer></script>
-    <title>Project: To-do list</title>
+    <script src="script.js" defer></script>
+    <title>Project: To-do List</title>
 </head>
 <body>
     <header>
-        <div class="icon">icon</div>
-        <div class="title">TO DO LIST APP</div>
+        <div class="header-icon">icon</div>
+        <div class="header-title">Title</div>
     </header>
-    <main>
-        <div class="sidebar">
-            <div class="add project form">add project</div>
-            <div class="project-list">project 1</div>
-            <div class="todo-form">to do template</div>
-        </div>
-        <div class="main">
-            <div class="sort">
-                <button class="sort-name">Aa</button>
-                <button class="sort-date">cal</button>
-                <button class="sort-priority">!</button>
+
+    <div class="main">
+        <div class="dashboard">
+            <div class="filters">
+                <div class="today">Today</div>
+                <div class="urgent">Urgent</div>
             </div>
-            <div class="content"></div>
+            <div class="projects">
+                <div class="project-card">
+                    <div class="project-title">Home</div>
+                </div>
+            </div>
+
+            <div class="new-project-row">
+                <input type="text" id="input-new-project" placeholder="New project">
+                <button type="button" class="button-new-project">+</button>
+            </div>
         </div>
-    </main>
+        <div class="content">
+            <div class="items"></div>
+            <div class="new-item-row">
+                <button type="button" class="button-new-item">+</button>
+                <div class="new-item-label">New</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
 
 
+
+
+
 <!-- 
-side bar: 
-    add project form 
-        name 
-        color picker 
-        + button  
-    
-    projects list 
-        projects to select 
-            display all todo items 
-        - button 
+project maker: 
+    name 
+    color 
+    + button 
 
-    todo template 
-        name (short string 20char)
-        deadline (date)
-        priority (dropdown: low medium high)
-        description (long string 100char)
-        + button 
-
-todo field: 
-    todo template: 
-        name
-        deadline 
-        priority 
-        description 
-        checkbox 
-        delete button 
-
-    sort function 
-        name 
-        deadline 
-        priority 
-
+to-do card: 
+    title 
+    date 
+    priority 
+    description
+    - button 
+    checkbox 
 -->
