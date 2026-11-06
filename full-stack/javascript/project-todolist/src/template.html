@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>template</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <title>Project: To-do List</title>
 </head>
 <body>
-    <header>To do list</header>
+    <div class="sidebar">
+        <img src="images/logo.png" class="logo">
+        <div class="dashboard">
+            <div class="presets">
+                <div>Today</div>
+                <div>Urgent</div>
+            </div>
+            <div class="projects">
+                <div>Home</div>
+                <div>Work</div>
+                <div>Sport</div>
+            </div>
+        </div>
+        <div class="new-project-row">
+            <input type="text" id="input-new-project" placeholder="Add project">
+            <button type="button" class="button-new-project">+</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="main-title">Title</div>
+        <div class="items">Cards</div>
+        <div class="new-item-row">
+            <div class="new-item-label">Add item</div>
+            <button type="button" class="button-new-item">+</button>
+        </div>
+    </div>
 </body>
 </html>
