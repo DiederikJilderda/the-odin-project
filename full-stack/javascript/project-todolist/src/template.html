@@ -9,30 +9,120 @@
 </head>
 <body>
     <div class="sidebar">
-        <img src="images/logo.png" class="logo">
+        <div class="logo">
+            <img src="images/logo.png">
+        </div>
+
         <div class="dashboard">
-            <div class="presets">
-                <div>Today</div>
-                <div>Urgent</div>
+            <div class="dashboard-today">
+                <div class="row">
+                    <img src="images/today.png" class="icon">
+                    <div class="dashboard-header">Today</div>
+                </div>
+
+                <div class="dashboard-tab">
+                    <div class="row">
+                        <div class="dashboard-projectname">Today</div>
+                    </div>
+                    <div class="row">
+                        <div class="number-items">11</div>
+                        <div class="number-urgent">5</div>
+                    </div>
+                </div>
             </div>
-            <div class="projects">
-                <div>Home</div>
-                <div>Work</div>
-                <div>Sport</div>
+
+
+            <div class="dashboard-projects">
+                <div class="row">
+                    <img src="images/projects.png" class="icon">
+                    <div class="dashboard-header">Projects</div>
+                </div>
+
+                <div class="dashboard-tab dashboard-tab-active">
+                    <div class="row">
+                        <div class="dashboard-projectname">Home</div>
+                    </div>
+                    <div class="row">
+                        <div class="number-items">1</div>
+                        <div class="number-urgent">1</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-tab">
+                    <div class="row">
+                        <div class="dashboard-projectname">Work</div>
+                    </div>
+                    <div class="row">
+                        <div class="number-items">3</div>
+                        <div class="number-urgent">0</div>
+                    </div>
+                </div>
+
             </div>
         </div>
+
         <div class="new-project-row">
-            <input type="text" id="input-new-project" placeholder="Add project">
+            <input type="text" id="input-new-project" placeholder="New project">
             <button type="button" class="button-new-project">+</button>
         </div>
     </div>
 
     <div class="main">
-        <div class="main-title">Title</div>
-        <div class="items">Cards</div>
+        <div class="main-title">Home</div>
+
+        <div class="items">
+
+            <div class="item-card">
+                <div class="item-content">
+                    <div class="item-header">
+                        <input type="checkbox">
+                        <div class="item-title">Pick up son</div>
+                        <div class="options">...</div>
+                    </div>
+                    <div class="item-subheader">
+                        <div class="item-date">06/11</div>
+                        <div class="item-priority">High</div>
+                    </div>
+                    <div class="item-notes">Notes: I don't have a son?</div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-content">
+                    <div class="item-header">
+                        <input type="checkbox">
+                        <div class="item-title">Pick up son</div>
+                        <div class="options">...</div>
+                    </div>
+                    <div class="item-subheader">
+                        <div class="item-date">06/11</div>
+                        <div class="item-priority">High</div>
+                    </div>
+                    <div class="item-notes">Notes: I don't have a son?</div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-content">
+                    <div class="item-header">
+                        <input type="checkbox">
+                        <div class="item-title">Pick up son</div>
+                        <div class="options">...</div>
+                    </div>
+                    <div class="item-subheader">
+                        <div class="item-date">06/11</div>
+                        <div class="item-priority">High</div>
+                    </div>
+                    <div class="item-notes">Notes: I don't have a son?</div>
+                </div>
+            </div>
+
+        </div>
+
         <div class="new-item-row">
-            <div class="new-item-label">Add item</div>
             <button type="button" class="button-new-item">+</button>
+            <div class="new-item-label">New item</div>
+            
         </div>
     </div>
 </body>
