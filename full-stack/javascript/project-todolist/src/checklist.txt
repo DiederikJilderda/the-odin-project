@@ -1,0 +1,36 @@
+CSS: 
+[X] Redesign item card layout 
+	[X] improved layout 
+	[X] values as readonly inputfields 
+	[X] priority as checklist (low medium high) 
+	[X] refine checkbox alignment 
+
+
+[ ] redesign dashboard tabs 
+	[ ] numbers and delete button arrangement 
+	[ ] strict grid? 
+
+
+JS: 
+[ ] dashboard tab 
+	[ ] toggle focus attribute 
+	[ ] use focus attribute in item class 
+	[ ] clear item list 
+	[ ] generate all items as itemsList.createUI (sort by date) 
+	[ ] special case: today tab (for all project tabs find all items for today) 
+
+[ ] item class 
+	[X] properties: name, project, date, priority, notes 
+	[ ] methods: 
+		[ ] add self to project.itemList[] 
+		[X] create UI (check urgency) 
+		[ ] delete UI and instance 
+		[X] checkbox to complete/incomplete (toggle completed attribute) 
+		[ ] doubleclick inputfield to edit (toggle readonly attribute)
+
+[ ] new item button 
+	[ ] pop up? 
+	[ ] template to fill new class instance 
+
+[ ] dashboard number values 
+	[ ] how to update? 
