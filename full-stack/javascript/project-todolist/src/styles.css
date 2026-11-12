@@ -30,7 +30,7 @@
 body {
     display: flex; 
     flex-direction: row;
-    margin-left: calc(50% - 25rem  - 16rem); 
+    /* margin-left: calc(50% - 25rem  - 16rem);  */
     height: 80vh;
 }
 
@@ -307,7 +307,7 @@ img {
 
 .item-content {
     display: grid; 
-    grid-template-columns: 40% 60%;
+    grid-template-columns: 50% 50%;
     gap: 0.5rem;
 }
 

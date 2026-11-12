@@ -43,18 +43,18 @@ class Project {
         newRow.append(newItems, newUrgent); 
 
         // append delete button 
-        const projectDeleteButton = document.createElement("button"); 
-        projectDeleteButton.classList.add("button-delete-project"); 
-        projectDeleteButton.setAttribute("type", "button"); 
-        newDashboardTab.append(projectDeleteButton); 
+        // const projectDeleteButton = document.createElement("button"); 
+        // projectDeleteButton.classList.add("button-delete-project"); 
+        // projectDeleteButton.setAttribute("type", "button"); 
+        // newDashboardTab.append(projectDeleteButton); 
 
-        const deleteImg = document.createElement("img");
-        deleteImg.src = "images/delete.png"; 
-        projectDeleteButton.append(deleteImg); 
+        // const deleteImg = document.createElement("img");
+        // deleteImg.src = "images/delete.png"; 
+        // projectDeleteButton.append(deleteImg); 
 
         // attach event listeners
         newDashboardTab.addEventListener("click", (event) => this.clickTab(event)); 
-        projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
+        // projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
     }
 
     deleteDashboardTab(event) {
@@ -72,23 +72,19 @@ class Project {
     }
 
     clickTab(event) {
-        // event handler when tab gets clicked 
-        console.log("You clicked this tab");
+        activeProject = this; 
+        this.setFocus(event); 
     }
 
-
-    dropFocus(newDashboardTab) {
-        // console.log("dropped focus of: " + this);
-        newDashboardTab.classList.remove("dashboard-tab-active");
-    }
-
-    setFocus(newDashboardTab) {
+    setFocus(event) {
         // function to set focus to this tab and unfocus other tabs 
-        for (const tab of projectList) {
-            tab.dropFocus(newDashboardTab);
-        }
-        newDashboardTab.classList.add("dashboard-tab-active");
+        const dashboardTabs = document.querySelectorAll(".dashboard-tab");
+        dashboardTabs.forEach( (tab) => tab.classList.remove("dashboard-tab-active") ); 
+        event.target.closest(".dashboard-tab").classList.add("dashboard-tab-active");
     }
+
+    // clear items 
+    // generate items 
 }
 
 
@@ -306,7 +302,7 @@ function newProjectHandler(name) {
 
 // behaviour for new item creation 
 function newItemHandler() {
-    new Item("Work", "do laundry", "11/12/26", "high", "do it");
+    new Item(activeProject.projectName, "do laundry", "11/12/26", "low", "do it");
 }
 
 
@@ -314,7 +310,7 @@ function newItemHandler() {
 
 
 //// Global event listeners 
-const activeProject = "Today";
+let activeProject = "Today";
 
 // create new project event listeners 
 const newProjectInput = document.querySelector("#input-new-project"); 
