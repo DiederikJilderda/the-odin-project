@@ -34,3 +34,55 @@ JS:
 
 [ ] dashboard number values 
 	[ ] how to update? 
+
+
+
+
+
+class DashboardTab {
+
+	PROPERTIES 
+	- tab name 
+	- itemsList  
+	- total items 
+	- total urgent items 
+	
+
+	METHODS
+	- create project button -> create tab UI (select under which header) 
+	- click tab -> dashboardFocus()
+	- click tab -> generate item cards and set main header 
+	- get/set number of items values 
+
+
+	child class Filter {
+		- on dashboard click -> filter through all items of projectsList[] 
+		- disable create item button 
+	}
+
+
+	child class Project {		
+		- add delete button to tab 
+		- delete dashboard tab 
+	}
+}
+
+
+
+class Task { 
+
+	PROPERTIES 
+	- parent project 
+	- title 
+	- date 
+	- priority 
+	- notes 
+
+
+	METHODS 
+	- create new card UI 
+	- add Task to parent project itemsList 
+	- delete Task from parent project itemsList 
+	- toggle complete 
+
+} 

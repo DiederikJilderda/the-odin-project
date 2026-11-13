@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
-    <title>Project: To-do List</title>
+    <title>Project: To-Do List</title>
 </head>
 <body>
     <div class="sidebar">
@@ -14,45 +14,21 @@
         </div>
 
         <div class="dashboard">
-            <div class="dashboard-today">
+
+            <div class="dashboard-highlights">
                 <div class="row">
                     <img src="images/today.png" class="icon">
-                    <div class="dashboard-header">For you</div>
-                </div>
-
-                <div class="dashboard-tab dashboard-tab-active">
-                    <div class="dashboard-projectname">Today</div>
-                    <div class="row">
-                        <div class="number-items">11</div>
-                        <div class="number-urgent">5</div>
-                    </div>
+                    <div class="dashboard-header">Highlights</div>
                 </div>
             </div>
-
 
             <div class="dashboard-projects">
                 <div class="row">
                     <img src="images/projects.png" class="icon">
                     <div class="dashboard-header">Projects</div>
                 </div>
-                <!-- <div class="dashboard-tab dashboard-tab-active">
-                    <div class="dashboard-projectname">Home</div>
-                    <div class="row">
-                        <div class="number-items">1</div>
-                        <div class="number-urgent">1</div>
-                    </div>
-                    <button type="button" class="button-delete-project"><img src="images/delete.png"></button>
-                </div>
-
-                <div class="dashboard-tab">
-                    <div class="dashboard-projectname">Work</div>
-                    <div class="row">
-                        <div class="number-items">3</div>
-                        <div class="number-urgent">0</div>
-                    </div>
-                    <button type="button" class="button-delete-project"><img src="images/delete.png"></button>
-                </div> -->
             </div>
+
         </div>
 
         <div class="new-project-row">
@@ -64,109 +40,109 @@
     <div class="main">
         <div class="main-title">Home</div>
 
-        <div class="items">
-            <div class="item-card">
-                <div class="item-header">
+        <div class="tasks">
+            <div class="task-card">
+                <div class="task-header">
                     <input type="checkbox">
-                    <div class="item-title">Pick up son</div>
-                    <button type="button" class="button-delete-item"><img src="images/delete.png"></button>                   
+                    <div class="task-title">Pick up son</div>
+                    <button type="button" class="button-delete-task"><img src="images/delete.png"></button>                   
                 </div>
-                <div class="item-content">
+                <div class="task-content">
                     <div>
-                        <div class="item-unit">
-                            <div class="item-subheader">Project: </div>
-                            <input id="item-project" type="text" value="Home" readonly></input>
+                        <div class="task-unit">
+                            <div class="task-subheader">Project: </div>
+                            <input id="task-project" type="text" value="Home" readonly></input>
                         </div>
-                        <div class="item-unit">
-                            <div class="item-subheader">Due date: </div>
-                            <input id="item-date" type="date" value="2026-11-19" readonly></input>
+                        <div class="task-unit">
+                            <div class="task-subheader">Due date: </div>
+                            <input id="task-date" type="date" value="2026-11-19" readonly></input>
                         </div>
-                        <div class="item-unit">
-                            <div class="item-subheader">Priority: </div>
-                            <input id="item-priority" type="text" value="High" readonly></input>
-                            <!-- <select id="item-priority" type="options">
-                                <option value="low" disabled>Low</option>
-                                <option value="medium" disabled>Medium</option>
-                                <option value="high" selected>High</option>
-                            </select> -->
-                        </div>
-                    </div>
-                    <div>
-                        <div class="item-subheader">Notes: </div>
-                        <input id="item-notes" type="textarea" value="I have a son?" readonly></input>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item-card urgent">
-                <div class="item-header">
-                    <input type="checkbox">
-                    <div class="item-title">Pick up son</div>
-                    <button type="button" class="button-delete-item"><img src="images/delete.png"></button>                   
-                </div>
-                <div class="item-content">
-                    <div class="card-left">
-                        <div class="item-unit">
-                            <div class="item-subheader">Project: </div>
-                            <input id="item-project" type="text" value="Home" readonly></input>
-                        </div>
-                        <div class="item-unit">
-                            <div class="item-subheader">Due date: </div>
-                            <input id="item-date" type="date" value="2026-11-19" readonly></input>
-                        </div>
-                        <div class="item-unit">
-                            <div class="item-subheader">Priority: </div>
-                            <input id="item-priority" type="text" value="High" readonly></input>
-                            <!-- <select id="item-priority" type="options">
-                                <option value="low" disabled>Low</option>
-                                <option value="medium" disabled>Medium</option>
-                                <option value="high" selected>High</option>
-                            </select> -->
-                        </div>
-                    </div>
-                    <div class="card-right">
-                        <div class="item-subheader">Notes: </div>
-                        <input id="item-notes" type="textarea" value="I have a son?" readonly></input>
-                    </div>
-                </div>
-            </div>
-
-            <div class="item-card completed">
-                <div class="item-header">
-                    <input type="checkbox">
-                    <div class="item-title">Pick up son</div>
-                    <button type="button" class="button-delete-item"><img src="images/delete.png"></button>                   
-                </div>
-                <div class="item-content">
-                    <div class="card-left">
-                        <div class="item-unit">
-                            <div class="item-subheader">Project: </div>
-                            <input id="item-project" type="text" value="Home" readonly></input>
-                        </div>
-                        <div class="item-unit">
-                            <div class="item-subheader">Due date: </div>
-                            <input id="item-date" type="date" value="2026-11-19" readonly></input>
-                        </div>
-                        <div class="item-unit">
-                            <div class="item-subheader">Priority: </div>
-                            <!-- <input id="item-priority" type="text" value="High" readonly></input> -->
-                            <select id="item-priority">
-                                <option value="low" disabled>Low</option>
-                                <option value="medium" disabled>Medium</option>
+                        <div class="task-unit">
+                            <div class="task-subheader">Priority: </div>
+                            <!-- <input id="task-priority" type="text" value="High" readonly></input> -->
+                            <select id="task-priority" type="options">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
                                 <option value="high" selected>High</option>
                             </select>
                         </div>
                     </div>
-                    <div class="card-right">
-                        <div class="item-subheader">Notes: </div>
-                        <input id="item-notes" type="textarea" value="I have a son?" readonly></input>
+                    <div>
+                        <div class="task-subheader">Notes: </div>
+                        <input id="task-notes" type="textarea" value="I have a son?" readonly></input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card urgent">
+                <div class="task-header">
+                    <input type="checkbox">
+                    <div class="task-title">Pick up son</div>
+                    <button type="button" class="button-delete-task"><img src="images/delete.png"></button>                   
+                </div>
+                <div class="task-content">
+                    <div>
+                        <div class="task-unit">
+                            <div class="task-subheader">Project: </div>
+                            <input id="task-project" type="text" value="Home" readonly></input>
+                        </div>
+                        <div class="task-unit">
+                            <div class="task-subheader">Due date: </div>
+                            <input id="task-date" type="date" value="2026-11-19" readonly></input>
+                        </div>
+                        <div class="task-unit">
+                            <div class="task-subheader">Priority: </div>
+                            <!-- <input id="task-priority" type="text" value="High" readonly></input> -->
+                            <select id="task-priority" type="options">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high" selected>High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="task-subheader">Notes: </div>
+                        <input id="task-notes" type="textarea" value="I have a son?" readonly></input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="task-card completed">
+                <div class="task-header">
+                    <input type="checkbox">
+                    <div class="task-title">Pick up son</div>
+                    <button type="button" class="button-delete-task"><img src="images/delete.png"></button>                   
+                </div>
+                <div class="task-content">
+                    <div>
+                        <div class="task-unit">
+                            <div class="task-subheader">Project: </div>
+                            <input id="task-project" type="text" value="Home" readonly></input>
+                        </div>
+                        <div class="task-unit">
+                            <div class="task-subheader">Due date: </div>
+                            <input id="task-date" type="date" value="2026-11-19" readonly></input>
+                        </div>
+                        <div class="task-unit">
+                            <div class="task-subheader">Priority: </div>
+                            <!-- <input id="task-priority" type="text" value="High" readonly></input> -->
+                            <select id="task-priority" type="options">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high" selected>High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="task-subheader">Notes: </div>
+                        <input id="task-notes" type="textarea" value="I have a son?" readonly></input>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="new-item-row">
-            <button type="button" class="button-new-item">+</button>
+        <div class="new-task-row">
+            <button type="button" class="button-new-task">+</button>
         </div>
     </div>
 </body>
