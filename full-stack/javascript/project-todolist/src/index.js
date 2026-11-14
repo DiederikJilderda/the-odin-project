@@ -1,3 +1,7 @@
+// import logoImg from "./images/logo.png";
+// import highlightsImg from "./images/today.png";
+// import projectsImg from "./images/projects.png";
+
 class DashboardTab {
     constructor() {
         // this.totalTasks = 0; 
