@@ -1,21 +1,13 @@
 class DashboardTab {
-    constructor(projectName) {
-        this.projectName = projectName; 
-
-        this.parent = ".dashboard-highlights";
-        
-        this.tasksList = [];
+    constructor() {
         this.totalTasks = 0; 
         this.totalUrgent = 0; 
-
-        dashboardTabList.push(this);
-        this.newProjectDisplay();
     }
 
     // create project UI display  
-    newProjectDisplay() {
+    newProjectDisplay(parentNode) {
         // query parent element 
-        const dashboard = document.querySelector(this.parent);                              // set parent container 
+        const dashboard = document.querySelector(parentNode);                              // set parent container 
 
         // new dashboard tab 
         const newDashboardTab = document.createElement("div");
@@ -86,15 +78,23 @@ class DashboardTab {
 }
 
 class HighlightTab extends DashboardTab {
-    // constructor() {
-    //     super.parent = ".dashboard-highlights";
-    // }
+    constructor(projectName) {
+        super();
+        this.projectName = projectName; 
+
+        dashboardTabList.push(this);
+        this.newProjectDisplay(".dashboard-highlights");
+    }
 }
 
 class ProjectTab extends DashboardTab {
-    // constructor() {
-    //     super.parent = ".dashboard-projects";
-    // }
+    constructor(projectName) {
+        super();
+        this.projectName = projectName; 
+        
+        dashboardTabList.push(this);
+        this.newProjectDisplay(".dashboard-projects");
+    }
 }
 
 class Task {
@@ -106,7 +106,7 @@ class Task {
         this.notes = notes; 
         this.status = false; 
 
-        project.tasksList.push(this);
+        taskList.push(this);
         this.createCardDisplay();
     }
 
@@ -288,12 +288,13 @@ class Task {
 
 // sets focus to new project input if empty, otherwise create new project instance 
 let dashboardTabList = [];
-function newProjectHandler(name, parent) {
+let taskList = []; 
+function newProjectHandler(name) {
     if (name === "") {
         newProjectInput.focus();
     }
     else {
-        new ProjectTab(name, parent);
+        new ProjectTab(name);
         newProjectInput.value = "";
     }
 }
@@ -334,8 +335,6 @@ newTaskButton.addEventListener("click", () => newTaskHandler(activeTab));
 
 
 
-
-
 // initialise starting projects and tasks 
 let activeTab;
 
@@ -343,8 +342,6 @@ let activeTab;
     // Highlights 
     new HighlightTab("Today");
     new HighlightTab("Priority");
-    // newProjectHandler("Today", "highlight");
-    // newProjectHandler("High Priority", "highlight");
 
     // Projects 
     newProjectHandler("Home");
