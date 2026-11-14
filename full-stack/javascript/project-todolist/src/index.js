@@ -1,7 +1,10 @@
 class DashboardTab {
     constructor() {
-        this.totalTasks = 0; 
-        this.totalUrgent = 0; 
+        // this.totalTasks = 0; 
+        // this.totalUrgent = 0; 
+        this.filteredTasks = []; 
+
+        this.dashboardElement = null; 
     }
 
     // create project UI display  
@@ -13,6 +16,7 @@ class DashboardTab {
         const newDashboardTab = document.createElement("div");
         newDashboardTab.classList.add("dashboard-tab");
         dashboard.append(newDashboardTab); 
+        this.dashboardElement = newDashboardTab; 
 
         // append project name 
         const newProjectName = document.createElement("div");
@@ -36,23 +40,26 @@ class DashboardTab {
         newRow.append(newTasks, newUrgent); 
 
         // append delete button 
-        const projectDeleteButton = document.createElement("button"); 
-        projectDeleteButton.classList.add("button-delete-project"); 
-        projectDeleteButton.setAttribute("type", "button"); 
-        newDashboardTab.append(projectDeleteButton); 
+        // if (this instanceof ProjectTab) {
+        //     const projectDeleteButton = document.createElement("button"); 
+        //     projectDeleteButton.classList.add("button-delete-project"); 
+        //     projectDeleteButton.setAttribute("type", "button"); 
+        //     newDashboardTab.append(projectDeleteButton); 
 
-        const deleteImg = document.createElement("img");
-        deleteImg.src = "images/delete.png"; 
-        projectDeleteButton.append(deleteImg); 
+        //     const deleteImg = document.createElement("img");
+        //     deleteImg.src = "images/delete.png"; 
+        //     projectDeleteButton.append(deleteImg); 
+
+        //     projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
+        // }
 
         // attach event listeners
         newDashboardTab.addEventListener("click", (event) => this.clickTab(event)); 
-        projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
     }
 
     deleteDashboardTab(event) {
         // delete DOM element 
-        event.target.closest(".dashboard-tab").remove();
+        this.dashboardElement.remove();
 
         // delete class instance 
         const index = dashboardTabList.indexOf(this); 
@@ -62,17 +69,40 @@ class DashboardTab {
         event.stopPropagation();
 
         // set focus to today tab 
+        dashboardTabList[0].clickTab();
     }
 
-    clickTab(event) {
+    clickTab() {
         activeTab = this; 
-        this.setFocus(event); 
+        this.setFocus(); 
+        this.clearTasks();
+        this.updateMainTitle();
+        this.filteredTasks = this.filterTasks()
+        this.createTaskDisplays(this.filteredTasks);
     }
 
-    setFocus(event) {
+    setFocus() {
         const dashboardTabs = document.querySelectorAll(".dashboard-tab");
         dashboardTabs.forEach( (tab) => tab.classList.remove("dashboard-tab-active") ); 
-        event.target.closest(".dashboard-tab").classList.add("dashboard-tab-active");
+        this.dashboardElement.classList.add('dashboard-tab-active');
+    }
+
+    clearTasks() {
+        const allTasks = document.querySelectorAll(".task-card");
+        allTasks.forEach( (task) => task.remove());
+    }
+
+    updateMainTitle() {
+        const mainTitle = document.querySelector(".main-title");
+        mainTitle.textContent = this.projectName; 
+    }
+
+    createTaskDisplays(filteredTasks) {
+        for (const task of filteredTasks) {
+            task.createCardDisplay();
+        }
+        // clear filteredTasks array 
+        this.filteredTasks = []; 
     }
 
 }
@@ -80,26 +110,52 @@ class DashboardTab {
 class HighlightTab extends DashboardTab {
     constructor(projectName) {
         super();
-        this.projectName = projectName; 
-
+        
+        this.projectName = projectName;
         dashboardTabList.push(this);
         this.newProjectDisplay(".dashboard-highlights");
+    }
+
+    filterTasks() {
+        if (this.projectName === "All") {
+            this.filteredTasks = taskList;
+        }
+
+        else if (this.projectName === "Important") {
+            for (const task of taskList) {
+                if (task.priority === "high") {
+                    this.filteredTasks.push(task);
+                }
+            }
+        }
+        // filter for date 
+
+        return this.filteredTasks; 
     }
 }
 
 class ProjectTab extends DashboardTab {
     constructor(projectName) {
         super();
-        this.projectName = projectName; 
         
+        this.projectName = projectName;
         dashboardTabList.push(this);
         this.newProjectDisplay(".dashboard-projects");
+    }
+
+    filterTasks() {
+        for (const task of taskList) {
+            if (task.project === this) {
+                this.filteredTasks.push(task);
+            }
+        }
+        return this.filteredTasks; 
     }
 }
 
 class Task {
     constructor(project, name, due, priority, notes) {
-        this.project = project.projectName; 
+        this.project = project; 
         this.name = name; 
         this.due = due; 
         this.priority = priority; 
@@ -173,7 +229,7 @@ class Task {
                             const projectInput = document.createElement("input"); 
                             projectInput.setAttribute("id", "task-project")
                             projectInput.setAttribute("type", "text"); 
-                            projectInput.setAttribute("value", this.project);                       // task project
+                            projectInput.setAttribute("value", this.project.projectName);                       // task project
                             projectInput.setAttribute("readonly", true);
 
                         projectUnit.append(projectHeader, projectInput);
@@ -340,13 +396,22 @@ let activeTab;
 
 (function() {
     // Highlights 
+    new HighlightTab("All");
     new HighlightTab("Today");
-    new HighlightTab("Priority");
+    new HighlightTab("Important");
 
     // Projects 
-    newProjectHandler("Home");
-    newProjectHandler("Work");
-    newProjectHandler("Sport");
+    const homeTab = new ProjectTab("Home");
+    const workTab = new ProjectTab("Work");
+    const sportTab = new ProjectTab("Sport");
+
+    // Tasks 
+    new Task(homeTab, "Task 01", 14-11-2026, "low", "some notes");
+    new Task(workTab, "Task 02", 16-11-2026, "high", "some notes");
+    new Task(sportTab, "Task 03", 15-11-2026, "medium", "some notes");
+    new Task(homeTab, "Task 04", 14-11-2026, "low", "some notes");
+    new Task(homeTab, "Task 05", 20-11-2026, "high", "some notes");
 })();
 
+dashboardTabList[0].clickTab();
 activeTab = dashboardTabList[0];

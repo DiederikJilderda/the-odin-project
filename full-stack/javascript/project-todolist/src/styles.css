@@ -283,7 +283,7 @@ img {
     border-color:  var(--darkblue);
     /* border-top-right-radius: var(--card-radius); */
     border-bottom-right-radius: var(--card-radius);
-
+    box-shadow: 0.5rem 0.5rem 0.25rem var(--grey200);
 }
 
 .task-header, 
