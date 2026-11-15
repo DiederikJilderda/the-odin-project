@@ -1,13 +1,14 @@
 // import logoImg from "./images/logo.png";
 // import highlightsImg from "./images/today.png";
 // import projectsImg from "./images/projects.png";
+import deletePNG from "./images/delete.png";
+import "./styles.css";
 
 class DashboardTab {
     constructor() {
         // this.totalTasks = 0; 
         // this.totalUrgent = 0; 
         this.filteredTasks = []; 
-
         this.dashboardElement = null; 
     }
 
@@ -51,7 +52,7 @@ class DashboardTab {
         //     newDashboardTab.append(projectDeleteButton); 
 
         //     const deleteImg = document.createElement("img");
-        //     deleteImg.src = "images/delete.png"; 
+        //     deleteImg.src = deletePNG; 
         //     projectDeleteButton.append(deleteImg); 
 
         //     projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
@@ -145,6 +146,8 @@ class ProjectTab extends DashboardTab {
         this.projectName = projectName;
         dashboardTabList.push(this);
         this.newProjectDisplay(".dashboard-projects");
+
+        this.clickTab();
     }
 
     filterTasks() {
@@ -187,6 +190,7 @@ class Task {
                     card.classList.remove("urgent");
                 }
 
+                // check task completed 
                 if (this.status === true) {
                     card.classList.add("completed"); 
                 }
@@ -210,7 +214,7 @@ class Task {
                     deleteButton.setAttribute("type", "button");
                     deleteButton.classList.add("button-delete-task"); 
                         const deleteImg = document.createElement("img"); 
-                        deleteImg.src = "images/delete.png"; 
+                        deleteImg.src = deletePNG; 
                         deleteButton.append(deleteImg);
 
                 header.append(checkbox, name, deleteButton);
@@ -310,6 +314,9 @@ class Task {
         // event listeners 
         deleteButton.addEventListener("click", (event) => this.deleteTask(event));
         prioritySelect.addEventListener("change", () => this.urgentToggle(prioritySelect.value, card));
+    
+        // input change event listeners
+         
     }
 
     // method: delete button 
