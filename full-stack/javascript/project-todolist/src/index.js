@@ -4,11 +4,12 @@
 // import deletePNG from "./images/delete.png";
 // import "./styles.css";
 
+const deletePNG = "./images/delete.png";
+
 class DashboardTab {
     constructor() {
-        // this.totalTasks = 0; 
-        // this.totalUrgent = 0; 
-        this.filteredTasks = []; 
+        this.totalElement = null; 
+        this.urgentElement = null; 
         this.dashboardElement = null; 
     }
 
@@ -23,40 +24,47 @@ class DashboardTab {
         dashboard.append(newDashboardTab); 
         this.dashboardElement = newDashboardTab; 
 
+
+        // append numbers 
+
+        const newRow = document.createElement("div"); 
+        newRow.classList.add("row"); 
+        newDashboardTab.appendChild(newRow); 
+
+        const newTasks = document.createElement("div"); 
+        this.totalElement = newTasks; 
+        newTasks.classList.add("number-tasks"); 
+
+        const newUrgent = document.createElement("div"); 
+        this.urgentElement = newUrgent; 
+
+        newUrgent.classList.add("number-urgent"); 
+
+        this.updateDashboardNumbers();                                                // update dashboard numbers
+
+        newRow.append(newTasks, newUrgent); 
+
         // append project name 
         const newProjectName = document.createElement("div");
         newProjectName.classList.add("dashboard-projectname"); 
         newProjectName.textContent = this.projectName; 
         newDashboardTab.append(newProjectName);
 
-        // append numbers 
-        const newRow = document.createElement("div"); 
-        newRow.classList.add("row"); 
-        newDashboardTab.appendChild(newRow); 
 
-        const newTasks = document.createElement("div"); 
-        newTasks.classList.add("number-tasks"); 
-        newTasks.textContent = this.totalTasks;  
-
-        const newUrgent = document.createElement("div"); 
-        newUrgent.classList.add("number-urgent"); 
-        newUrgent.textContent = this.totalUrgent; 
-
-        newRow.append(newTasks, newUrgent); 
 
         // append delete button 
-        // if (this instanceof ProjectTab) {
-        //     const projectDeleteButton = document.createElement("button"); 
-        //     projectDeleteButton.classList.add("button-delete-project"); 
-        //     projectDeleteButton.setAttribute("type", "button"); 
-        //     newDashboardTab.append(projectDeleteButton); 
+        if (this instanceof ProjectTab) {
+            const projectDeleteButton = document.createElement("button"); 
+            projectDeleteButton.classList.add("button-delete-project"); 
+            projectDeleteButton.setAttribute("type", "button"); 
+            newDashboardTab.append(projectDeleteButton); 
 
-        //     const deleteImg = document.createElement("img");
-        //     deleteImg.src = deletePNG; 
-        //     projectDeleteButton.append(deleteImg); 
+            const deleteImg = document.createElement("img");
+            deleteImg.src = deletePNG; 
+            projectDeleteButton.append(deleteImg); 
 
-        //     projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
-        // }
+            projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
+        }
 
         // attach event listeners
         newDashboardTab.addEventListener("click", (event) => this.clickTab(event)); 
@@ -73,7 +81,10 @@ class DashboardTab {
         // block clickTab function execution 
         event.stopPropagation();
 
-        // set focus to today tab 
+        // delete underlying tasks 
+        this.deleteTasks(); 
+
+        // set focus to today tab if on project tab 
         dashboardTabList[0].clickTab();
     }
 
@@ -82,8 +93,8 @@ class DashboardTab {
         this.setFocus(); 
         this.clearTasks();
         this.updateMainTitle();
-        this.filteredTasks = this.filterTasks()
-        this.createTaskDisplays(this.filteredTasks);
+        this.createTaskDisplays(this.filterTasks());
+        this.updateDashboardNumbers();
     }
 
     setFocus() {
@@ -102,14 +113,28 @@ class DashboardTab {
         mainTitle.textContent = this.projectName; 
     }
 
-    createTaskDisplays(filteredTasks) {
-        for (const task of filteredTasks) {
+    createTaskDisplays(filteredTaskList) {
+        for (const task of filteredTaskList) {
             task.createCardDisplay();
-        }
-        // clear filteredTasks array 
-        this.filteredTasks = []; 
+        } 
     }
 
+    updateDashboardNumbers() {
+        for (const tab of dashboardTabList) {
+            let totalTasks = 0; 
+            let totalUrgent = 0; 
+
+            for (const task of tab.filterTasks()) {
+                totalTasks++; 
+                if (task.priority === "high") {
+                    totalUrgent++; 
+                }
+            }
+
+            tab.totalElement.textContent = totalTasks; 
+            tab.urgentElement.textContent = totalUrgent; 
+        }
+    }
 }
 
 class HighlightTab extends DashboardTab {
@@ -122,20 +147,34 @@ class HighlightTab extends DashboardTab {
     }
 
     filterTasks() {
-        if (this.projectName === "All") {
-            this.filteredTasks = taskList;
-        }
+        let filteredTasks = [];
 
-        else if (this.projectName === "Important") {
+        // All 
+        if (this.projectName === "All") {
+            filteredTasks = taskList;
+        }
+        
+        // Today
+        else if (this.projectName === "Today") {
+            const getDate = new Date();
+            const today = getDate.getFullYear() + "-" + (getDate.getMonth()+1) + "-" + getDate.getDate();
             for (const task of taskList) {
-                if (task.priority === "high") {
-                    this.filteredTasks.push(task);
+                if (task.due === today) {
+                    filteredTasks.push(task);
                 }
             }
         }
-        // filter for date 
 
-        return this.filteredTasks; 
+        // Priority 
+        else if (this.projectName === "Priority") {
+            for (const task of taskList) {
+                if (task.priority === "high") {
+                    filteredTasks.push(task);
+                }
+            }
+        }
+
+        return filteredTasks; 
     }
 }
 
@@ -151,18 +190,27 @@ class ProjectTab extends DashboardTab {
     }
 
     filterTasks() {
+        let filteredTasks = []; 
+
         for (const task of taskList) {
             if (task.project === this) {
-                this.filteredTasks.push(task);
+                filteredTasks.push(task);
             }
         }
-        return this.filteredTasks; 
+        return filteredTasks; 
     }
+
+    deleteTasks() {
+        for (const task of this.filterTasks()) {
+            taskList.splice(taskList.indexOf(task), 1); 
+        }
+    }
+
 }
 
 class Task {
     constructor(project, name, due, priority, notes) {
-        this.project = project; 
+        this.project = project;             // object 
         this.name = name; 
         this.due = due; 
         this.priority = priority; 
@@ -181,14 +229,6 @@ class Task {
             // new card 
             const card = document.createElement("div"); 
             card.classList.add("task-card");
-
-                // check task completed 
-                // if (this.status === true) {
-                //     card.classList.add("completed"); 
-                // }
-                // else {
-                //     card.classList.remove("completed");
-                // }
 
                 // card header 
                 const header = document.createElement("div");
@@ -212,8 +252,7 @@ class Task {
                     deleteButton.setAttribute("type", "button");
                     deleteButton.classList.add("button-delete-task"); 
                         const deleteImg = document.createElement("img"); 
-                        // deleteImg.src = deletePNG; 
-                        deleteImg.src = "./images/delete.png";
+                        deleteImg.src = deletePNG;
                         deleteButton.append(deleteImg);
 
                 header.append(checkbox, nameInput, deleteButton);
@@ -233,29 +272,25 @@ class Task {
                             projectHeader.classList.add("task-subheader");
                             projectHeader.textContent = "Project: "; 
 
-                            const projectInput = this.projectDropdown();
-                            // const projectInput = document.createElement("input"); 
-                            // projectInput.setAttribute("id", "task-project")
-                            // projectInput.setAttribute("type", "text"); 
-                            // projectInput.setAttribute("value", this.project.projectName);                       // task project
-                            // projectInput.setAttribute("readonly", true);
+                            const projectInput = this.dynamicProjectDropdown();                     // task project
+                            // projectInput.value = this.project; 
 
                         projectUnit.append(projectHeader, projectInput);
 
                         // date 
-                        const dateUnit = document.createElement("div"); 
-                        dateUnit.classList.add("task-unit");
+                        const dueUnit = document.createElement("div"); 
+                        dueUnit.classList.add("task-unit");
 
-                            const dateHeader = document.createElement("div"); 
-                            dateHeader.classList.add("task-subheader");
-                            dateHeader.textContent = "Due date: "; 
+                            const dueHeader = document.createElement("div"); 
+                            dueHeader.classList.add("task-subheader");
+                            dueHeader.textContent = "Due date: "; 
 
-                            const dateInput = document.createElement("input"); 
-                            dateInput.setAttribute("id", "task-date")
-                            dateInput.setAttribute("type", "date"); 
-                            dateInput.setAttribute("value", this.date);                             // task date
+                            const dueInput = document.createElement("input"); 
+                            dueInput.classList.add("task-date");
+                            dueInput.setAttribute("type", "date"); 
+                            dueInput.setAttribute("value", this.due);                             // task due date
 
-                        dateUnit.append(dateHeader, dateInput);
+                        dueUnit.append(dueHeader, dueInput);
 
                         // priority 
                         const priorityUnit = document.createElement("div"); 
@@ -265,8 +300,8 @@ class Task {
                             priorityHeader.classList.add("task-subheader");
                             priorityHeader.textContent = "Priority: ";                                  // task priority 
 
-                            const prioritySelect = document.createElement("select"); 
-                            prioritySelect.setAttribute("id", "task-priority"); 
+                            const prioritySelect = document.createElement("select");
+                            prioritySelect.classList.add("task-priority");
 
                                 const optionPriorityLow = document.createElement("option"); 
                                 optionPriorityLow.setAttribute("value", "low");
@@ -291,7 +326,6 @@ class Task {
                                 optionPriorityHigh.textContent = "High";
 
                                 if (this.priority === "high") {
-                                    
                                     card.classList.add("urgent");
                                     optionPriorityHigh.selected = true;
                                 }
@@ -300,7 +334,7 @@ class Task {
 
                         priorityUnit.append(priorityHeader, prioritySelect);
 
-                    left.append(projectUnit, dateUnit, priorityUnit); 
+                    left.append(projectUnit, dueUnit, priorityUnit); 
 
                     // right column 
                     const right = document.createElement("div"); 
@@ -312,8 +346,8 @@ class Task {
                             notesHeader.classList.add("task-subheader");
                             notesHeader.textContent = "Notes: "; 
 
-                            const notesInput = document.createElement("input"); 
-                            notesInput.setAttribute("id", "task-notes")
+                            const notesInput = document.createElement("input");
+                            notesInput.classList.add("task-notes");
                             notesInput.setAttribute("type", "textarea"); 
                             notesInput.setAttribute("value", this.notes);                          // task notes 
 
@@ -328,43 +362,61 @@ class Task {
         tasksParent.append(card);
 
         // event listeners 
-        deleteButton.addEventListener("click", (event) => this.deleteTask(event));
-        prioritySelect.addEventListener("change", () => this.urgentToggle(prioritySelect.value, card));
-    
-        // input change event listeners
-        // name 
-        // project -> drop down 
-        // date 
-        // priority 
-        // notes 
-        nameInput.addEventListener("change", () => this.name = nameInput.value);
-        projectInput.addEventListener("change", () => this.project = projectInput.value);
-        notesInput.addEventListener("change", () => this.notes = notesInput.value);
-         
+        deleteButton.addEventListener("click", (event) => { this.deleteTask(event);
+                                                            activeTab.updateDashboardNumbers();
+                                                        });
+
+        prioritySelect.addEventListener("change", () => {   this.urgentToggle(prioritySelect.value, card)
+                                                            activeTab.updateDashboardNumbers();
+                                                        });
+
+        nameInput.addEventListener("change", () =>      {   this.name = nameInput.value; 
+                                                            activeTab.updateDashboardNumbers();
+                                                        });
+        nameInput.addEventListener("keydown",(event) => { if (event.key === "Enter" || event.key === "Escape") {
+                                                            nameInput.blur();}
+                                                        });
+
+        projectInput.addEventListener("change", () =>   {   const index = dashboardTabList.findIndex( (tab) => tab.projectName === projectInput.value); 
+                                                            this.project = dashboardTabList[index];
+                                                            activeTab.updateDashboardNumbers();
+                                                        });
+
+        dueInput.addEventListener("change", () =>       {   this.due = dueInput.value;
+                                                            activeTab.updateDashboardNumbers();
+                                                        });
+
+        prioritySelect.addEventListener("change", () => {   this.priority = prioritySelect.value; 
+                                                            this.urgentToggle(prioritySelect.value, card); 
+                                                            activeTab.updateDashboardNumbers();
+                                                        });
+
+        notesInput.addEventListener("change", () =>     {   this.notes = notesInput.value;
+                                                            activeTab.updateDashboardNumbers();
+                                                        });
+        notesInput.addEventListener("keydown",(event) => { if (event.key === "Enter" || event.key === "Escape") {
+                                                            notesInput.blur();}
+                                                        });
+
     }
 
-    projectDropdown() {
-        // iterate over dashboardtablist with instanceof project 
-        // const optionPriorityLow = document.createElement("option"); 
-            // optionPriorityLow.setAttribute("value", "low");
-            // optionPriorityLow.textContent = "Low";
-
-        const projectInput = document.createElement("select"); 
-        projectInput.setAttribute("id", "task-project")
-        projectInput.setAttribute("type", "text"); 
-        projectInput.setAttribute("value", this.project.projectName);
+    dynamicProjectDropdown() {
+        const projectInput = document.createElement("select");
+        projectInput.classList.add("task-project");
 
         for (const tab of dashboardTabList) {
             if (tab instanceof ProjectTab) {
                 const projectOption = document.createElement("option");
-                projectOption.setAttribute("value", tab);
+                projectOption.setAttribute("value", tab.projectName);
                 projectOption.textContent = tab.projectName;
+
+                if (tab.projectName === this.project.projectName) {
+                    projectOption.selected = true; 
+                }
 
                 projectInput.append(projectOption);
             }
         }
-
-
         return projectInput;
     }
 
@@ -407,6 +459,31 @@ class Task {
 //// Global event functions 
 
 // sets focus to new project input if empty, otherwise create new project instance 
+function taskFormPopup() {
+    const body = document.querySelector("body");
+
+    // create modal background  
+    const modalBackground = document.createElement("div"); 
+    modalBackground.classList.add("modal-background");
+    body.append(modalBackground);
+
+    modalBackground.addEventListener("click", (event) => {if (event.target === modalBackground) {event.target.remove()}});
+    
+
+    // create modal content container 
+    const modalContent = document.createElement("div");
+    modalContent.classList.add("modal-content");
+    modalBackground.append(modalContent);
+
+    // create task card 
+    // const taskCard = document.createElement("div");
+    // taskCard.classList.add("task-card");
+    // modalContent.append(taskCard);
+
+}
+
+
+
 let dashboardTabList = [];
 let taskList = []; 
 function newProjectHandler(name) {
@@ -421,12 +498,15 @@ function newProjectHandler(name) {
 
 
 // behaviour for new task creation 
-function newTaskHandler(activeTab) {
-    new Task(activeTab, "do laundry", "11/12/26", "medium", "do it");
+function newTaskHandler() {
+    let taskProject = dashboardTabList[3];
+    if (activeTab instanceof ProjectTab) {
+        taskProject = activeTab;
+    }
+
+    new Task(taskProject, "do laundry", "2026-11-18", "medium", " just do it");
+    taskProject.updateDashboardNumbers();
 }
-
-
-
 
 
 //// Global event listeners 
@@ -436,13 +516,13 @@ const newProjectInput = document.querySelector("#input-new-project");
 const newProjectButton = document.querySelector(".button-new-project");
 
 newProjectButton.addEventListener("click", () => newProjectHandler(newProjectInput.value));
-document.addEventListener("keydown", (e) => {
+document.addEventListener("keydown", (event) => {
     // enter: create new project 
-    if (e.key === "Enter" && document.activeElement === newProjectInput) {
+    if (event.key === "Enter" && document.activeElement === newProjectInput) {
         newProjectHandler(newProjectInput.value);
     }
     // escape: unfocus and clear project input field 
-    if (e.key === "Escape" && document.activeElement === newProjectInput) {
+    if (event.key === "Escape" && document.activeElement === newProjectInput) {
         newProjectInput.blur();
         newProjectInput.value = "";
     }
@@ -451,7 +531,9 @@ document.addEventListener("keydown", (e) => {
 
 // create new task 
 const newTaskButton = document.querySelector(".button-new-task"); 
-newTaskButton.addEventListener("click", () => newTaskHandler(activeTab));
+// newTaskButton.addEventListener("click", () => newTaskHandler()); 
+newTaskButton.addEventListener("click", () => taskFormPopup());
+
 
 
 
@@ -462,7 +544,7 @@ let activeTab;
     // Highlights 
     new HighlightTab("All");
     new HighlightTab("Today");
-    new HighlightTab("Important");
+    new HighlightTab("Priority");
 
     // Projects 
     const homeTab = new ProjectTab("Home");
@@ -470,12 +552,11 @@ let activeTab;
     const sportTab = new ProjectTab("Sport");
 
     // Tasks 
-    new Task(homeTab, "Task 01", 14-11-2026, "low", "some notes");
-    new Task(workTab, "Task 02", 16-11-2026, "high", "some notes");
-    new Task(sportTab, "Task 03", 15-11-2026, "medium", "some notes");
-    new Task(homeTab, "Task 04", 14-11-2026, "low", "some notes");
-    new Task(homeTab, "Task 05", 20-11-2026, "high", "some notes");
+    new Task(homeTab, "Task 01", "2026-11-16", "low", "some notes");
+    new Task(workTab, "Task 02", "2026-11-17", "high", "some notes");
+    new Task(sportTab, "Task 03", "2026-11-16", "medium", "some notes");
+    new Task(homeTab, "Task 04", "2026-12-16", "low", "some notes");
+    new Task(homeTab, "Task 05", "2026-11-15", "high", "some notes");
 })();
 
 dashboardTabList[0].clickTab();
-activeTab = dashboardTabList[0];
