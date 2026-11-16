@@ -1,8 +1,8 @@
 // import logoImg from "./images/logo.png";
 // import highlightsImg from "./images/today.png";
 // import projectsImg from "./images/projects.png";
-import deletePNG from "./images/delete.png";
-import "./styles.css";
+// import deletePNG from "./images/delete.png";
+// import "./styles.css";
 
 class DashboardTab {
     constructor() {
@@ -182,21 +182,13 @@ class Task {
             const card = document.createElement("div"); 
             card.classList.add("task-card");
 
-                // check task urgency  
-                if (this.priority === "high") {
-                    card.classList.add("urgent");
-                }
-                else {
-                    card.classList.remove("urgent");
-                }
-
                 // check task completed 
-                if (this.status === true) {
-                    card.classList.add("completed"); 
-                }
-                else {
-                    card.classList.remove("completed");
-                }
+                // if (this.status === true) {
+                //     card.classList.add("completed"); 
+                // }
+                // else {
+                //     card.classList.remove("completed");
+                // }
 
                 // card header 
                 const header = document.createElement("div");
@@ -204,20 +196,27 @@ class Task {
 
                     const checkbox = document.createElement("input");
                     checkbox.setAttribute("type", "checkbox");
+                    if (this.status === true) {
+                        checkbox.setAttribute("checked", true); 
+                        card.classList.add("completed");
+                    }
+
                     checkbox.addEventListener("click", () => this.checkboxToggle(checkbox, card));
 
-                    const name = document.createElement("div");
-                    name.classList.add("task-title"); 
-                    name.textContent = this.name;                                                      // task name 
+                    const nameInput = document.createElement("input");
+                    nameInput.setAttribute("type", "text");
+                    nameInput.classList.add("task-title"); 
+                    nameInput.value = this.name;                                                      // task name 
 
                     const deleteButton = document.createElement("button"); 
                     deleteButton.setAttribute("type", "button");
                     deleteButton.classList.add("button-delete-task"); 
                         const deleteImg = document.createElement("img"); 
-                        deleteImg.src = deletePNG; 
+                        // deleteImg.src = deletePNG; 
+                        deleteImg.src = "./images/delete.png";
                         deleteButton.append(deleteImg);
 
-                header.append(checkbox, name, deleteButton);
+                header.append(checkbox, nameInput, deleteButton);
 
                 // card content  
                 const content = document.createElement("div"); 
@@ -234,11 +233,12 @@ class Task {
                             projectHeader.classList.add("task-subheader");
                             projectHeader.textContent = "Project: "; 
 
-                            const projectInput = document.createElement("input"); 
-                            projectInput.setAttribute("id", "task-project")
-                            projectInput.setAttribute("type", "text"); 
-                            projectInput.setAttribute("value", this.project.projectName);                       // task project
-                            projectInput.setAttribute("readonly", true);
+                            const projectInput = this.projectDropdown();
+                            // const projectInput = document.createElement("input"); 
+                            // projectInput.setAttribute("id", "task-project")
+                            // projectInput.setAttribute("type", "text"); 
+                            // projectInput.setAttribute("value", this.project.projectName);                       // task project
+                            // projectInput.setAttribute("readonly", true);
 
                         projectUnit.append(projectHeader, projectInput);
 
@@ -272,13 +272,29 @@ class Task {
                                 optionPriorityLow.setAttribute("value", "low");
                                 optionPriorityLow.textContent = "Low";
 
+                                if (this.priority === "low") {
+                                    card.classList.remove("urgent");
+                                    optionPriorityLow.selected = true;
+                                }
+
                                 const optionPriorityMedium = document.createElement("option"); 
                                 optionPriorityMedium.setAttribute("value", "medium");
                                 optionPriorityMedium.textContent = "Medium";
 
+                                if (this.priority === "medium") {
+                                    card.classList.remove("urgent");
+                                    optionPriorityMedium.selected = true;
+                                }
+
                                 const optionPriorityHigh = document.createElement("option"); 
                                 optionPriorityHigh.setAttribute("value", "high");
                                 optionPriorityHigh.textContent = "High";
+
+                                if (this.priority === "high") {
+                                    
+                                    card.classList.add("urgent");
+                                    optionPriorityHigh.selected = true;
+                                }
 
                             prioritySelect.append(optionPriorityLow, optionPriorityMedium, optionPriorityHigh);
 
@@ -316,13 +332,50 @@ class Task {
         prioritySelect.addEventListener("change", () => this.urgentToggle(prioritySelect.value, card));
     
         // input change event listeners
+        // name 
+        // project -> drop down 
+        // date 
+        // priority 
+        // notes 
+        nameInput.addEventListener("change", () => this.name = nameInput.value);
+        projectInput.addEventListener("change", () => this.project = projectInput.value);
+        notesInput.addEventListener("change", () => this.notes = notesInput.value);
          
+    }
+
+    projectDropdown() {
+        // iterate over dashboardtablist with instanceof project 
+        // const optionPriorityLow = document.createElement("option"); 
+            // optionPriorityLow.setAttribute("value", "low");
+            // optionPriorityLow.textContent = "Low";
+
+        const projectInput = document.createElement("select"); 
+        projectInput.setAttribute("id", "task-project")
+        projectInput.setAttribute("type", "text"); 
+        projectInput.setAttribute("value", this.project.projectName);
+
+        for (const tab of dashboardTabList) {
+            if (tab instanceof ProjectTab) {
+                const projectOption = document.createElement("option");
+                projectOption.setAttribute("value", tab);
+                projectOption.textContent = tab.projectName;
+
+                projectInput.append(projectOption);
+            }
+        }
+
+
+        return projectInput;
     }
 
     // method: delete button 
     deleteTask(event) {
         // delete DOM element 
         event.target.closest(".task-card").remove();
+
+        // delete task object 
+        const index = taskList.indexOf(this); 
+        taskList.splice(index, 1);
     }
 
     // method: checkbox toggle 
