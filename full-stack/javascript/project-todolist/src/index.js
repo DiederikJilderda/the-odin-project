@@ -1,10 +1,8 @@
 // import logoImg from "./images/logo.png";
 // import highlightsImg from "./images/today.png";
 // import projectsImg from "./images/projects.png";
-// import deletePNG from "./images/delete.png";
 // import "./styles.css";
 
-const deletePNG = "./images/delete.png";
 
 class DashboardTab {
     constructor() {
@@ -57,11 +55,8 @@ class DashboardTab {
             const projectDeleteButton = document.createElement("button"); 
             projectDeleteButton.classList.add("button-delete-project"); 
             projectDeleteButton.setAttribute("type", "button"); 
+            projectDeleteButton.textContent = "\u00d7"; 
             newDashboardTab.append(projectDeleteButton); 
-
-            const deleteImg = document.createElement("img");
-            deleteImg.src = deletePNG; 
-            projectDeleteButton.append(deleteImg); 
 
             projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
         }
@@ -93,7 +88,19 @@ class DashboardTab {
         this.setFocus(); 
         this.clearTasks();
         this.updateMainTitle();
-        this.createTaskDisplays(this.filterTasks());
+
+        const filteredTasks = this.filterTasks();
+        let taskList = [];
+
+        if (visible === true) {
+            taskList = filteredTasks;
+        }
+
+        else {
+            taskList = filteredTasks.filter( (task) => task.completed === false);
+        }
+
+        this.createTaskDisplays(taskList);
         this.updateDashboardNumbers();
     }
 
@@ -197,7 +204,8 @@ class ProjectTab extends DashboardTab {
                 filteredTasks.push(task);
             }
         }
-        return filteredTasks; 
+
+        return filteredTasks
     }
 
     deleteTasks() {
@@ -215,7 +223,7 @@ class Task {
         this.due = due; 
         this.priority = priority; 
         this.notes = notes; 
-        this.status = false; 
+        this.completed = false; 
 
         taskList.push(this);
         this.createCardDisplay();
@@ -236,12 +244,12 @@ class Task {
 
                     const checkbox = document.createElement("input");
                     checkbox.setAttribute("type", "checkbox");
-                    if (this.status === true) {
+                    if (this.completed === true) {
                         checkbox.setAttribute("checked", true); 
                         card.classList.add("completed");
                     }
 
-                    checkbox.addEventListener("click", () => this.checkboxToggle(checkbox, card));
+                    checkbox.addEventListener("click", (event) => this.checkboxToggle(event, card));
 
                     const nameInput = document.createElement("input");
                     nameInput.setAttribute("type", "text");
@@ -251,9 +259,7 @@ class Task {
                     const deleteButton = document.createElement("button"); 
                     deleteButton.setAttribute("type", "button");
                     deleteButton.classList.add("button-delete-task"); 
-                        const deleteImg = document.createElement("img"); 
-                        deleteImg.src = deletePNG;
-                        deleteButton.append(deleteImg);
+                    deleteButton.textContent = "\u00d7";
 
                 header.append(checkbox, nameInput, deleteButton);
 
@@ -272,7 +278,7 @@ class Task {
                             projectHeader.classList.add("task-subheader");
                             projectHeader.textContent = "Project: "; 
 
-                            const projectInput = this.dynamicProjectDropdown();                     // task project
+                            const projectInput = dynamicProjectDropdown();                     // task project
                             // projectInput.value = this.project; 
 
                         projectUnit.append(projectHeader, projectInput);
@@ -400,26 +406,6 @@ class Task {
 
     }
 
-    dynamicProjectDropdown() {
-        const projectInput = document.createElement("select");
-        projectInput.classList.add("task-project");
-
-        for (const tab of dashboardTabList) {
-            if (tab instanceof ProjectTab) {
-                const projectOption = document.createElement("option");
-                projectOption.setAttribute("value", tab.projectName);
-                projectOption.textContent = tab.projectName;
-
-                if (tab.projectName === this.project.projectName) {
-                    projectOption.selected = true; 
-                }
-
-                projectInput.append(projectOption);
-            }
-        }
-        return projectInput;
-    }
-
     // method: delete button 
     deleteTask(event) {
         // delete DOM element 
@@ -431,16 +417,21 @@ class Task {
     }
 
     // method: checkbox toggle 
-    checkboxToggle(checkboxElement, card) {
-        if (checkboxElement.checked) {
-            this.status = true;
-            card.classList.add("completed"); 
-
-        }
-        else {
-            this.status = false;
+    checkboxToggle(event, card) {
+        if (this.completed === true) {
+            event.target.checked = false; 
             card.classList.remove("completed"); 
+            this.completed = false; 
         }
+
+        else {
+            event.target.checked = true; 
+            card.classList.add("completed"); 
+            this.completed = true; 
+        }
+        
+        activeTab.updateDashboardNumbers();
+        activeTab.clickTab();
     }
 
     //method: urgent toggle 
@@ -456,9 +447,28 @@ class Task {
 
 
 
-//// Global event functions 
+//// Global functions 
+function dynamicProjectDropdown() {
+    const projectInput = document.createElement("select");
+    projectInput.classList.add("task-project");
 
-// sets focus to new project input if empty, otherwise create new project instance 
+    for (const tab of dashboardTabList) {
+        if (tab instanceof ProjectTab) {
+            const projectOption = document.createElement("option");
+            projectOption.setAttribute("value", tab.projectName);
+            projectOption.textContent = tab.projectName;
+
+            if (tab.projectName === activeTab.projectName) {
+                projectOption.selected = true; 
+            }
+
+            projectInput.append(projectOption);
+        }
+    }
+    return projectInput;
+}
+
+
 function taskFormPopup() {
     const body = document.querySelector("body");
 
@@ -470,18 +480,11 @@ function taskFormPopup() {
     modalBackground.addEventListener("click", (event) => {if (event.target === modalBackground) {event.target.remove()}});
     
 
-    // create modal content container 
-    const modalContent = document.createElement("div");
-    modalContent.classList.add("modal-content");
-    modalBackground.append(modalContent);
-
-    // create task card 
-    // const taskCard = document.createElement("div");
-    // taskCard.classList.add("task-card");
-    // modalContent.append(taskCard);
-
+    // create modal content card 
+    const modalCard = document.createElement("form");
+    modalCard.classList.add("modal-card");
+    modalBackground.append(modalCard);
 }
-
 
 
 let dashboardTabList = [];
@@ -509,6 +512,22 @@ function newTaskHandler() {
 }
 
 
+// toggle visibility 
+function toggleVisibility() {
+    const visibilityIcons = ["images/visibility/hidden grey200.png", "images/visibility/visible grey70.png"]; 
+    
+    if (visible === true) {
+        visibilityButton.setAttribute("src", visibilityIcons[0]);
+        visible = false; 
+    }
+    else {
+        visibilityButton.setAttribute("src", visibilityIcons[1]);
+        visible = true; 
+    }
+
+    activeTab.clickTab();
+}
+
 //// Global event listeners 
 
 // create new project
@@ -535,6 +554,11 @@ const newTaskButton = document.querySelector(".button-new-task");
 newTaskButton.addEventListener("click", () => taskFormPopup());
 
 
+// set visibility 
+let visible = true; 
+const visibilityButton = document.querySelector(".visibility");
+visibilityButton.addEventListener("click", () => toggleVisibility());
+
 
 
 // initialise starting projects and tasks 
@@ -552,11 +576,11 @@ let activeTab;
     const sportTab = new ProjectTab("Sport");
 
     // Tasks 
-    new Task(homeTab, "Task 01", "2026-11-16", "low", "some notes");
-    new Task(workTab, "Task 02", "2026-11-17", "high", "some notes");
-    new Task(sportTab, "Task 03", "2026-11-16", "medium", "some notes");
-    new Task(homeTab, "Task 04", "2026-12-16", "low", "some notes");
-    new Task(homeTab, "Task 05", "2026-11-15", "high", "some notes");
+    new Task(homeTab, "Task 01", "2026-11-19", "low", "some notes");
+    new Task(workTab, "Task 02", "2026-11-18", "high", "some notes");
+    new Task(sportTab, "Task 03", "2026-11-18", "medium", "some notes");
+    new Task(homeTab, "Task 04", "2026-12-18", "low", "some notes");
+    new Task(homeTab, "Task 05", "2026-11-20", "high", "some notes");
 })();
 
 dashboardTabList[0].clickTab();
