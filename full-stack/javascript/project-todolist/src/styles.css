@@ -379,8 +379,9 @@ img {
 
     &::placeholder {
         color: var(--grey230);
+        font-weight: normal;
         font-style: italic;
-        border-bottom: 1px dashed var(--grey200);
+        border-bottom: 1px dotted var(--grey200);
     }
 }
 
