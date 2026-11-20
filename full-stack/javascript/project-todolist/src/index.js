@@ -281,8 +281,7 @@ class Task {
                             projectHeader.classList.add("task-subheader");
                             projectHeader.textContent = "Project: "; 
 
-                            const projectInput = dynamicProjectDropdown();                     // task project
-                            // projectInput.value = this.project; 
+                            const projectInput = dynamicProjectDropdown(this.project);                     // task project
 
                         projectUnit.append(projectHeader, projectInput);
 
@@ -458,8 +457,10 @@ function today() {
     return today; 
 }
 
-function dynamicProjectDropdown() {
+
+function dynamicProjectDropdown(project) {
     const projectInput = document.createElement("select");
+    let dropdown = [];
     projectInput.classList.add("task-project");
 
     for (const tab of dashboardTabList) {
@@ -467,14 +468,15 @@ function dynamicProjectDropdown() {
             const projectOption = document.createElement("option");
             projectOption.setAttribute("value", tab.projectName);
             projectOption.textContent = tab.projectName;
-
-            if (tab.projectName === activeTab.projectName) {
-                projectOption.selected = true; 
-            }
-
             projectInput.append(projectOption);
+            dropdown.push(projectOption);
+
+            if (tab.projectName === project.projectName) {
+                    projectOption.selected = true;
+            }
         }
     }
+
     return projectInput;
 }
 
@@ -508,15 +510,9 @@ function taskFormPopup() {
                 titleInput.setAttribute("type", "text");
                 titleInput.setAttribute("id", "title-input");                              // task title
                 titleInput.classList.add("task-title"); 
-                titleInput.placeholder = "task";
+                titleInput.placeholder = "task description";
                 titleInput.required = true; 
 
-                // const deleteButton = document.createElement("button"); 
-                // deleteButton.setAttribute("type", "button");
-                // deleteButton.classList.add("button-delete-task"); 
-                // deleteButton.textContent = "\u00d7";
-
-            // header.append(submitProjectButton, titleInput, deleteButton);
             header.append(submitProjectButton, titleInput);
 
             // card content  
@@ -535,7 +531,7 @@ function taskFormPopup() {
                         projectHeader.textContent = "Project: "; 
                         projectHeader.setAttribute("for", "project-input");
 
-                        const projectInput = dynamicProjectDropdown();                  // task project
+                        const projectInput = dynamicProjectDropdown(activeTab);                  // task project
                         projectInput.setAttribute("id","project-input"); 
 
                     projectUnit.append(projectHeader, projectInput);
@@ -553,7 +549,7 @@ function taskFormPopup() {
                         dueInput.classList.add("task-date");
                         dueInput.setAttribute("type", "date"); 
                         dueInput.setAttribute("id", "due-input");     
-                        dueInput.required = true;                    // task due date
+                        dueInput.required = true;                                           // task due date
 
                     dueUnit.append(dueHeader, dueInput);
 
@@ -720,9 +716,9 @@ let activeTab;
     // Tasks 
     new Task(homeTab, "Task 01", "2026-11-19", "low", "some notes");
     new Task(workTab, "Task 02", "2026-11-18", "high", "some notes");
-    // new Task(sportTab, "Task 03", "2026-11-18", "medium", "some notes");
-    // new Task(homeTab, "Task 04", "2026-12-18", "low", "some notes");
-    // new Task(homeTab, "Task 05", "2026-11-20", "high", "some notes");
+    new Task(sportTab, "Task 03", "2026-11-18", "medium", "some notes");
+    new Task(sportTab, "Task 04", "2026-12-18", "low", "some notes");
+    new Task(homeTab, "Task 05", "2026-11-20", "high", "some notes");
 })();
 
 dashboardTabList[0].clickTab();

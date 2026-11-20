@@ -278,6 +278,7 @@ img {
     align-items: center;
     margin-bottom: 1.5rem; 
     margin-top: -1rem;
+    margin-right: 1rem;
 }
 
 .main-key {
@@ -302,8 +303,9 @@ img {
 .legend-card {
     height: 1.25rem; 
     width: 1.25rem; 
-    border: 2.5px solid; 
-    border-bottom-right-radius: 0.5rem;;
+    border: 1.5px solid; 
+    border-bottom-right-radius: 0.5rem;
+    box-shadow: 0.2rem 0.2rem var(--grey230);
 }
 
 .legend-card-blue {
@@ -336,7 +338,7 @@ img {
 }
 
 .task-card {
-    height: 11.5rem;
+    height: 12rem;
     width: 14rem; 
     border: solid 2px;
     border-color:  var(--darkblue);
@@ -360,7 +362,7 @@ img {
 
 .task-title {
     font-size: 14px;
-    font-weight: bold;;
+    font-weight: bold;
     padding: 0.25rem;
     margin-right: 1rem;
     margin-left: 0.5rem;
@@ -373,14 +375,15 @@ img {
 
     &:focus {
         background: var(--grey245); 
+        font-weight: normal;
         color: var(--grey50);
-        border-radius: 0.25rem;
+        border-radius: 0.5rem;
+        border: solid 1px var(--grey50);
     }
 
     &::placeholder {
-        color: var(--grey230);
+        color: white;
         font-weight: normal;
-        font-style: italic;
         border-bottom: 1px dotted var(--grey200);
     }
 }
@@ -392,7 +395,7 @@ img {
 .task-content {
     display: grid; 
     grid-template-columns: 50% 50%;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .task-unit {
@@ -401,9 +404,11 @@ img {
 
 .task-subheader {
     font-size: 12px;
+    cursor: default;
 }
 
 .task-card [type="checkbox"] {
+    cursor: pointer;
     accent-color: var(--lightblue);
     margin: 0;
 }
@@ -417,14 +422,21 @@ img {
     margin-left: -2px;
 }
 
+.task-content select,input[type="date"] {
+    cursor: pointer;
+}
+
 .task-content input[type="textarea"] {
-    resize: none; 
+    /* resize: none;  */
     width: 100%;
-    word-wrap: break-word;
+    /* word-wrap: break-word; */
 }
 
 .task-notes {
+    /* margin-right: 1rem; */
     font-style: italic;
+    padding-right: 1rem;
+    /* text-wrap-mode: wrap; */
 }
 
 
@@ -477,12 +489,11 @@ img {
 }
 
 .modal-card {
+    height: 12rem;
     box-shadow: none; 
     background: white;
-    border-color: var(--darkblue);;
-    border-left: none;
+    border: none;
     z-index: 10; 
-
 
     .modal-header {
         background-color: var(--darkblue);
@@ -497,10 +508,16 @@ img {
     cursor: pointer;
     height: auto; 
     width: 3rem; 
-    background-color: var(--lightblue);
-    border: solid 2px var(--darkblue);
-    border-right: none;
+    background-color: var(--grey230);
+    border: none;
     color: var(--grey50);
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
+    border-top-left-radius: 0.5rem;
+
+    &:hover {
+        background-color: var(--lightblue);
+        color: var(--darkblue);
+        border: solid 2px var(--darkblue);
+    }
 }
