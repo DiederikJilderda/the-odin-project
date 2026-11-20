@@ -323,10 +323,12 @@ img {
     background-image: linear-gradient(to bottom, var(--grey200) 0, var(--grey200) 0.25rem, white 0.25rem);
 }
 
-.visibility {
+.visibility, 
+.expand {
     cursor: pointer;
     height: 1.75rem; 
     width: auto;
+    margin-left: 1.0rem;
 }
 
 .tasks {

@@ -666,6 +666,22 @@ function toggleVisibility() {
     activeTab.clickTab();
 }
 
+// toggle collapse task information 
+function toggleExpand() {
+    const expandIcons = ["images/expanded.png", "images/collapsed.png"]; 
+    
+    if (expanded === true) {
+        expandButton.setAttribute("src", expandIcons[0]);
+        expanded = false; 
+    }
+    else {
+        expandButton.setAttribute("src", expandIcons[1]);
+        expanded = true; 
+    }
+
+    activeTab.clickTab();
+}
+
 //// Global event listeners 
 
 // create new project
@@ -688,7 +704,6 @@ document.addEventListener("keydown", (event) => {
 
 // create new task 
 const newTaskButton = document.querySelector(".button-new-task"); 
-// newTaskButton.addEventListener("click", () => newTaskHandler()); 
 newTaskButton.addEventListener("click", () => taskFormPopup());
 
 
@@ -697,6 +712,11 @@ let visible = true;
 const visibilityButton = document.querySelector(".visibility");
 visibilityButton.addEventListener("click", () => toggleVisibility());
 
+
+// set expand/collapse  
+let expanded = false; 
+const expandButton = document.querySelector(".expand");
+expandButton.addEventListener("click", () => toggleExpand());
 
 
 // initialise starting projects and tasks 
