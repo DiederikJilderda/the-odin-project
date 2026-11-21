@@ -66,7 +66,6 @@ class DashboardTab {
 
         // append delete button 
         if (this instanceof ProjectTab) {
-
             const projectDeleteButton = document.createElement("button"); 
             projectDeleteButton.classList.add("button-delete-project"); 
             projectDeleteButton.setAttribute("type", "button"); 
@@ -97,8 +96,13 @@ class DashboardTab {
 
         // set focus to today tab if on project tab 
         if (this === activeTab) {
-            dashboardTabList[0].clickTab();
+            dashboardTabList[0].setFocus();
         }
+        // otherwise update display 
+        else {
+            activeTab.renderTasks();
+        }
+
     }
 
     renderTasks() {
