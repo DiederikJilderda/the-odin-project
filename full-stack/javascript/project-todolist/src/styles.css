@@ -339,6 +339,10 @@ img {
     margin-bottom: 3rem;
 }
 
+.tasks-collapsed {
+    flex-direction: column;
+}
+
 .task-card {
     height: 12rem;
     width: 14rem; 
@@ -347,6 +351,7 @@ img {
     border-bottom-right-radius: var(--card-radius);
     box-shadow: 0.5rem 0.5rem 0.25rem var(--grey230);
 }
+
 
 .task-header, 
 .task-content {
@@ -360,6 +365,17 @@ img {
     justify-content: space-between;
     align-items: center;
     background-color: var(--darkblue);
+}
+
+.task-card-collapsed {
+    height: 2.5rem;
+
+    .task-header {
+        border-radius: none;
+        background-color: none;
+        height: 100%;
+        border-bottom-right-radius: 0.5rem;
+    }
 }
 
 .task-title {
