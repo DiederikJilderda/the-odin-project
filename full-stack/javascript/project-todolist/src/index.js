@@ -42,6 +42,20 @@ class DashboardTab {
 
         newRow.append(newTasks, newUrgent); 
 
+        // append color picker 
+        if (this instanceof ProjectTab) {
+            const inputColor = document.createElement("input"); 
+            inputColor.classList.add("input-project-color");
+            inputColor.setAttribute("type", "color");
+            inputColor.value = this.color;
+            newDashboardTab.append(inputColor); 
+
+            inputColor.addEventListener("click", (event) => {event.stopPropagation()});
+            inputColor.addEventListener("change", () => {this.color = inputColor.value; 
+                                                         activeTab.renderTasks();
+                                                        });
+        }
+
         // append project name 
         const newProjectName = document.createElement("div");
         newProjectName.classList.add("dashboard-projectname"); 
@@ -52,17 +66,19 @@ class DashboardTab {
 
         // append delete button 
         if (this instanceof ProjectTab) {
+
             const projectDeleteButton = document.createElement("button"); 
             projectDeleteButton.classList.add("button-delete-project"); 
             projectDeleteButton.setAttribute("type", "button"); 
             projectDeleteButton.textContent = "\u00d7"; 
+
             newDashboardTab.append(projectDeleteButton); 
 
             projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
         }
 
         // attach event listeners
-        newDashboardTab.addEventListener("click", (event) => this.clickTab(event)); 
+        newDashboardTab.addEventListener("click", (event) => this.setFocus(event)); 
     }
 
     deleteDashboardTab(event) {
@@ -73,7 +89,7 @@ class DashboardTab {
         const index = dashboardTabList.indexOf(this); 
         dashboardTabList.splice(index, 1);
 
-        // block clickTab function execution 
+        // block tab click function execution 
         event.stopPropagation();
 
         // delete underlying tasks 
@@ -85,9 +101,7 @@ class DashboardTab {
         }
     }
 
-    clickTab() {
-        activeTab = this; 
-        this.setFocus(); 
+    renderTasks() {
         this.clearTasks();
         this.updateMainTitle();
 
@@ -110,6 +124,9 @@ class DashboardTab {
         const dashboardTabs = document.querySelectorAll(".dashboard-tab");
         dashboardTabs.forEach( (tab) => tab.classList.remove("dashboard-tab-active") ); 
         this.dashboardElement.classList.add('dashboard-tab-active');
+
+        activeTab = this; 
+        this.renderTasks(); 
     }
 
     clearTasks() {
@@ -120,6 +137,14 @@ class DashboardTab {
     updateMainTitle() {
         const mainTitle = document.querySelector(".main-title");
         mainTitle.textContent = this.projectName; 
+
+        if (this instanceof ProjectTab) {
+            mainTitle.style.color = this.color;
+        }
+        else {
+            mainTitle.style.color = "#7f92b3";
+        }
+
     }
 
     createTaskDisplays(filteredTaskList) {
@@ -189,14 +214,15 @@ class HighlightTab extends DashboardTab {
 }
 
 class ProjectTab extends DashboardTab {
-    constructor(projectName) {
+    constructor(projectName, color) {
         super();
         
+        this.color = color;
         this.projectName = projectName;
         dashboardTabList.push(this);
         this.newProjectDisplay(".dashboard-projects");
 
-        this.clickTab();
+        this.setFocus();
     }
 
     filterTasks() {
@@ -240,15 +266,13 @@ class Task {
             // new card 
             const card = document.createElement("div"); 
             card.classList.add("task-card");
-
-            // add urgent color 
-            if (this.priority === "high") {
-                card.classList.add("urgent");
-            }
+            this.completed ? card.style.borderColor = "#c8c8c8" : card.style.borderColor = this.project.color;
 
                 // card header 
                 const header = document.createElement("div");
                 header.classList.add("task-header"); 
+                // header.style.backgroundColor = this.project.color;
+                this.completed ? header.style.backgroundColor = "#c8c8c8" : header.style.backgroundColor = this.project.color;
 
                     const checkbox = document.createElement("input");
                     checkbox.setAttribute("type", "checkbox");
@@ -358,12 +382,7 @@ class Task {
                                     }
 
                                 prioritySelect.append(optionPriorityLow, optionPriorityMedium, optionPriorityHigh);
-
-                                prioritySelect.addEventListener("change", () => {this.urgentToggle(prioritySelect.value, card)
-                                                                                activeTab.updateDashboardNumbers();
-                                                                            });
                                 prioritySelect.addEventListener("change", () => {this.priority = prioritySelect.value; 
-                                                                                this.urgentToggle(prioritySelect.value, card); 
                                                                                 activeTab.updateDashboardNumbers();
                                                                             });
 
@@ -381,11 +400,10 @@ class Task {
                                 notesHeader.classList.add("task-subheader");
                                 notesHeader.textContent = "Notes: "; 
 
-                                const notesInput = document.createElement("input");
+                                const notesInput = document.createElement("textarea");
                                 notesInput.classList.add("task-notes");
-                                notesInput.setAttribute("type", "textarea"); 
-                                notesInput.setAttribute("value", this.notes);                          // task notes 
-
+                                notesInput.value = this.notes;                          // task notes 
+                                 
                                 notesInput.addEventListener("change", () =>     {this.notes = notesInput.value;
                                                                                     activeTab.updateDashboardNumbers();
                                                                                 });
@@ -435,17 +453,7 @@ class Task {
         }
         
         activeTab.updateDashboardNumbers();
-        activeTab.clickTab();
-    }
-
-    //method: urgent toggle 
-    urgentToggle(newValue, card) {
-        if (newValue === "high") {
-            card.classList.add("urgent");
-        }
-        else {
-            card.classList.remove("urgent");
-        }
+        activeTab.renderTasks();
     }
 }
 
@@ -462,7 +470,6 @@ function today() {
 
 function dynamicProjectDropdown(project) {
     const projectInput = document.createElement("select");
-    let dropdown = [];
     projectInput.classList.add("task-project");
 
     for (const tab of dashboardTabList) {
@@ -471,7 +478,6 @@ function dynamicProjectDropdown(project) {
             projectOption.setAttribute("value", tab.projectName);
             projectOption.textContent = tab.projectName;
             projectInput.append(projectOption);
-            dropdown.push(projectOption);
 
             if (tab.projectName === project.projectName) {
                     projectOption.selected = true;
@@ -597,9 +603,8 @@ function taskFormPopup() {
                         notesHeader.textContent = "Notes: "; 
                         notesHeader.setAttribute("for", "notes-input");
 
-                        const notesInput = document.createElement("input");
+                        const notesInput = document.createElement("textarea");
                         notesInput.classList.add("task-notes");
-                        notesInput.setAttribute("type", "textarea"); 
                         notesInput.placeholder = "notes";
                         notesInput.setAttribute("id", "notes-input");                          // task notes 
 
@@ -631,7 +636,11 @@ function newProjectHandler(name) {
         newProjectInput.focus();
     }
     else {
-        new ProjectTab(name);
+        new ProjectTab(name, projectColors[colorIndex]);
+        colorIndex++;
+        if (colorIndex > 5) {
+            colorIndex = 0;
+        }
         newProjectInput.value = "";
     }
 }
@@ -665,26 +674,30 @@ function toggleVisibility() {
         visible = true; 
     }
 
-    activeTab.clickTab();
+    activeTab.renderTasks();
 }
 
 // toggle collapse task information 
 function toggleExpand() {
     const expandIcons = ["images/expanded.png", "images/collapsed.png"]; 
     const tasksParent = document.querySelector(".tasks");
+    const mainParent = document.querySelector(".main"); 
 
     if (expanded === true) {
         expandButton.setAttribute("src", expandIcons[0]);
         expanded = false; 
         tasksParent.classList.remove("tasks-collapsed");
+        mainParent.style.width = "50rem";
+
     }
     else {
         expandButton.setAttribute("src", expandIcons[1]);
         expanded = true; 
         tasksParent.classList.add("tasks-collapsed");
+        mainParent.style.width = "22.5rem";
     }
 
-    activeTab.clickTab();
+    activeTab.renderTasks();
 }
 
 //// Global event listeners 
@@ -723,6 +736,16 @@ let expanded = false;
 const expandButton = document.querySelector(".expand");
 expandButton.addEventListener("click", () => toggleExpand());
 
+// set project colors 
+const projectColors =   [ 
+                            "#de9592", 
+                            "#dec392",
+                            "#96c787",
+                            "#87b9c7",
+                            "#af9fcc",
+                            "#c99fcc"
+                        ]
+let colorIndex = 0; 
 
 // initialise starting projects and tasks 
 let activeTab;
@@ -734,16 +757,16 @@ let activeTab;
     new HighlightTab("Priority");
 
     // Projects 
-    const homeTab = new ProjectTab("Home");
-    const workTab = new ProjectTab("Work");
-    const sportTab = new ProjectTab("Sport");
+    newProjectHandler("Home");
+    newProjectHandler("Work");
+    newProjectHandler("Sport");
 
     // Tasks 
-    new Task(homeTab, "Task 01", "2026-11-19", "low", "some notes");
-    new Task(workTab, "Task 02", "2026-11-18", "high", "some notes");
-    new Task(sportTab, "Task 03", "2026-11-18", "medium", "some notes");
-    new Task(sportTab, "Task 04", "2026-12-18", "low", "some notes");
-    new Task(homeTab, "Task 05", "2026-11-20", "high", "some notes");
+    new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
+    new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
+    new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
+    new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
+    new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
 })();
 
-dashboardTabList[0].clickTab();
+dashboardTabList[0].setFocus();
