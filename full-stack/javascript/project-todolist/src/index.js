@@ -7,7 +7,6 @@
 class DashboardTab {
     constructor() {
         this.totalElement = null; 
-        this.urgentElement = null; 
         this.dashboardElement = null; 
     }
 
@@ -33,15 +32,18 @@ class DashboardTab {
         this.totalElement = newTasks; 
         newTasks.classList.add("number-tasks"); 
 
-        const newUrgent = document.createElement("div"); 
-        newUrgent.setAttribute("title", "High priority tasks");
-        this.urgentElement = newUrgent; 
-        newUrgent.classList.add("number-urgent"); 
-
         this.updateDashboardNumbers();                                                // update dashboard numbers
 
-        newRow.append(newTasks, newUrgent); 
+        newRow.append(newTasks); 
 
+
+        // append project name 
+        const newProjectName = document.createElement("div");
+        newProjectName.classList.add("dashboard-projectname"); 
+        newProjectName.textContent = this.projectName; 
+        newDashboardTab.append(newProjectName);
+
+        
         // append color picker 
         if (this instanceof ProjectTab) {
             const inputColor = document.createElement("input"); 
@@ -55,13 +57,6 @@ class DashboardTab {
                                                          activeTab.renderTasks();
                                                         });
         }
-
-        // append project name 
-        const newProjectName = document.createElement("div");
-        newProjectName.classList.add("dashboard-projectname"); 
-        newProjectName.textContent = this.projectName; 
-        newDashboardTab.append(newProjectName);
-
 
 
         // append delete button 
@@ -81,28 +76,29 @@ class DashboardTab {
     }
 
     deleteDashboardTab(event) {
-        // delete DOM element 
-        this.dashboardElement.remove();
+        if (window.confirm("Are you sure you want to delete this project?")) {
+            // delete DOM element 
+            this.dashboardElement.remove();
 
-        // delete class instance 
-        const index = dashboardTabList.indexOf(this); 
-        dashboardTabList.splice(index, 1);
+            // delete class instance 
+            const index = dashboardTabList.indexOf(this); 
+            dashboardTabList.splice(index, 1);
 
+            // delete underlying tasks 
+            this.deleteTasks(); 
+
+            // set focus to today tab if on project tab 
+            if (this === activeTab) {
+                dashboardTabList[0].setFocus();
+            }
+            // otherwise update display 
+            else {
+                activeTab.renderTasks();
+            }
+        }
+        
         // block tab click function execution 
         event.stopPropagation();
-
-        // delete underlying tasks 
-        this.deleteTasks(); 
-
-        // set focus to today tab if on project tab 
-        if (this === activeTab) {
-            dashboardTabList[0].setFocus();
-        }
-        // otherwise update display 
-        else {
-            activeTab.renderTasks();
-        }
-
     }
 
     renderTasks() {
@@ -144,9 +140,12 @@ class DashboardTab {
 
         if (this instanceof ProjectTab) {
             mainTitle.style.color = this.color;
+            mainTitle.style.borderColor = this.color;
+
         }
         else {
             mainTitle.style.color = "#7f92b3";
+            mainTitle.style.borderColor = "#7f92b3";
         }
 
     }
@@ -160,20 +159,14 @@ class DashboardTab {
     updateDashboardNumbers() {
         for (const tab of dashboardTabList) {
             let totalTasks = 0; 
-            let totalUrgent = 0; 
 
             for (const task of tab.filterTasks()) {
                 if (task.completed === false){
                     totalTasks++; 
                 }
-
-                if (task.priority === "high" && task.completed === false) {
-                    totalUrgent++; 
-                }
             }
 
             tab.totalElement.textContent = totalTasks; 
-            tab.urgentElement.textContent = totalUrgent; 
         }
     }
 }
@@ -254,6 +247,11 @@ class Task {
         this.project = project;             // object 
         this.title = title; 
         this.due = due; 
+
+        if (this.due === "") {
+            this.due = today();
+        }
+
         this.priority = priority; 
         this.notes = notes; 
         this.completed = false; 
@@ -275,7 +273,6 @@ class Task {
                 // card header 
                 const header = document.createElement("div");
                 header.classList.add("task-header"); 
-                // header.style.backgroundColor = this.project.color;
                 this.completed ? header.style.backgroundColor = "#c8c8c8" : header.style.backgroundColor = this.project.color;
 
                     const checkbox = document.createElement("input");
@@ -323,12 +320,13 @@ class Task {
 
                                 const projectHeader = document.createElement("div"); 
                                 projectHeader.classList.add("task-subheader");
-                                projectHeader.textContent = "Project: "; 
+                                projectHeader.textContent = "Project"; 
 
                                 const projectInput = dynamicProjectDropdown(this.project);                     // task project
                                 projectInput.addEventListener("change", () =>   {   const index = dashboardTabList.findIndex( (tab) => tab.projectName === projectInput.value); 
                                                                                     this.project = dashboardTabList[index];
                                                                                     activeTab.updateDashboardNumbers();
+                                                                                    activeTab.renderTasks();
                                                                                 });
                             projectUnit.append(projectHeader, projectInput);
 
@@ -338,7 +336,7 @@ class Task {
 
                                 const dueHeader = document.createElement("div"); 
                                 dueHeader.classList.add("task-subheader");
-                                dueHeader.textContent = "Due date: "; 
+                                dueHeader.textContent = "Due date"; 
 
                                 const dueInput = document.createElement("input"); 
                                 dueInput.classList.add("task-date");
@@ -346,6 +344,7 @@ class Task {
                                 dueInput.setAttribute("value", this.due);                             // task due date
                                 dueInput.addEventListener("change", () => {this.due = dueInput.value;
                                                                             activeTab.updateDashboardNumbers();
+                                                                            activeTab.renderTasks();
                                                                         });
                                                                         
                             dueUnit.append(dueHeader, dueInput);
@@ -356,7 +355,7 @@ class Task {
 
                                 const priorityHeader = document.createElement("div"); 
                                 priorityHeader.classList.add("task-subheader");
-                                priorityHeader.textContent = "Priority: ";                                  // task priority 
+                                priorityHeader.textContent = "Priority";                                  // task priority 
 
                                 const prioritySelect = document.createElement("select");
                                 prioritySelect.classList.add("task-priority");
@@ -388,6 +387,7 @@ class Task {
                                 prioritySelect.append(optionPriorityLow, optionPriorityMedium, optionPriorityHigh);
                                 prioritySelect.addEventListener("change", () => {this.priority = prioritySelect.value; 
                                                                                 activeTab.updateDashboardNumbers();
+                                                                                activeTab.renderTasks();
                                                                             });
 
                             priorityUnit.append(priorityHeader, prioritySelect);
@@ -402,7 +402,7 @@ class Task {
 
                                 const notesHeader = document.createElement("div"); 
                                 notesHeader.classList.add("task-subheader");
-                                notesHeader.textContent = "Notes: "; 
+                                notesHeader.textContent = "Notes"; 
 
                                 const notesInput = document.createElement("textarea");
                                 notesInput.classList.add("task-notes");
@@ -512,35 +512,37 @@ function taskFormPopup() {
     submitProjectButton.classList.add("button-submit-task");
 
     const modalCard = document.createElement("form");
-    modalCard.classList.add("task-card", "modal-card");
+    // modalCard.classList.add("task-card", "modal-card");
+    modalCard.classList.add("modal-card");
 
             // card header 
             const header = document.createElement("div");
-            header.classList.add("task-header", "modal-header"); 
+            // header.classList.add("task-header", "modal-header"); 
+            header.classList.add("modal-header"); 
 
                 const titleInput = document.createElement("input");  
                 titleInput.setAttribute("type", "text");
                 titleInput.setAttribute("id", "title-input");                              // task title
-                titleInput.classList.add("task-title"); 
+                titleInput.classList.add("modal-title"); 
                 titleInput.placeholder = "task description";
                 titleInput.required = true; 
 
-            header.append(submitProjectButton, titleInput);
+            header.append(titleInput, submitProjectButton);
 
             // card content  
             const content = document.createElement("div"); 
-            content.classList.add("task-content"); 
+            content.classList.add("modal-content"); 
 
                 // left column 
                 const left = document.createElement("div"); 
 
                     // project 
                     const projectUnit = document.createElement("div"); 
-                    projectUnit.classList.add("task-unit");
+                    projectUnit.classList.add("modal-unit");
 
                         const projectHeader = document.createElement("label"); 
-                        projectHeader.classList.add("task-subheader");
-                        projectHeader.textContent = "Project: "; 
+                        projectHeader.classList.add("modal-subheader");
+                        projectHeader.textContent = "Project"; 
                         projectHeader.setAttribute("for", "project-input");
 
                         const projectInput = dynamicProjectDropdown(activeTab);                  // task project
@@ -550,15 +552,15 @@ function taskFormPopup() {
 
                     // date 
                     const dueUnit = document.createElement("div"); 
-                    dueUnit.classList.add("task-unit");
+                    dueUnit.classList.add("modal-unit");
 
                         const dueHeader = document.createElement("label"); 
-                        dueHeader.classList.add("task-subheader");
-                        dueHeader.textContent = "Due date: "; 
+                        dueHeader.classList.add("modal-subheader");
+                        dueHeader.textContent = "Due date"; 
                         dueHeader.required = true; 
 
                         const dueInput = document.createElement("input"); 
-                        dueInput.classList.add("task-date");
+                        dueInput.classList.add("modal-date");
                         dueInput.setAttribute("type", "date"); 
                         dueInput.setAttribute("id", "due-input");     
                         dueInput.required = true;                                           // task due date
@@ -567,15 +569,15 @@ function taskFormPopup() {
 
                     // priority 
                     const priorityUnit = document.createElement("div"); 
-                    priorityUnit.classList.add("task-unit");
+                    priorityUnit.classList.add("modal-unit");
 
                         const priorityHeader = document.createElement("label"); 
-                        priorityHeader.classList.add("task-subheader");
-                        priorityHeader.textContent = "Priority: ";                                  // task priority 
+                        priorityHeader.classList.add("modal-subheader");
+                        priorityHeader.textContent = "Priority";                                  // task priority 
                         priorityHeader.setAttribute("for", "priority-input");
 
                         const prioritySelect = document.createElement("select");
-                        prioritySelect.classList.add("task-priority");
+                        prioritySelect.classList.add("modal-priority");
                         prioritySelect.setAttribute("id", "priority-input");
 
                             const optionPriorityLow = document.createElement("option"); 
@@ -600,15 +602,15 @@ function taskFormPopup() {
                 const right = document.createElement("div"); 
 
                     const notesUnit = document.createElement("div"); 
-                    notesUnit.classList.add("task-unit");
+                    notesUnit.classList.add("modal-unit");
 
                         const notesHeader = document.createElement("label"); 
-                        notesHeader.classList.add("task-subheader");
-                        notesHeader.textContent = "Notes: "; 
+                        notesHeader.classList.add("modal-subheader");
+                        notesHeader.textContent = "Notes"; 
                         notesHeader.setAttribute("for", "notes-input");
 
                         const notesInput = document.createElement("textarea");
-                        notesInput.classList.add("task-notes");
+                        notesInput.classList.add("modal-notes");
                         notesInput.placeholder = "notes";
                         notesInput.setAttribute("id", "notes-input");                          // task notes 
 
@@ -616,7 +618,7 @@ function taskFormPopup() {
                 right.append(notesUnit); 
             content.append(left, right);
         modalCard.append(header, content);
-    modalContainer.append(submitProjectButton, modalCard);
+    modalContainer.append(modalCard);
 
     // event listeners 
     modalBackground.addEventListener("click", (event) => {if (event.target === modalBackground) {event.target.remove()}});
@@ -640,12 +642,19 @@ function newProjectHandler(name) {
         newProjectInput.focus();
     }
     else {
-        new ProjectTab(name, projectColors[colorIndex]);
-        colorIndex++;
-        if (colorIndex > 5) {
-            colorIndex = 0;
+        if (dashboardTabList.some( (tab) => tab.projectName === newProjectInput.value)) {
+            alert("Please use a unique project name");
+            newProjectInput.value = "";
         }
-        newProjectInput.value = "";
+
+        else {
+            new ProjectTab(name, projectColors[colorIndex]);
+            colorIndex++;
+            if (colorIndex > 5) {
+                colorIndex = 0;
+            }
+            newProjectInput.value = "";
+        }
     }
 }
 
@@ -687,18 +696,17 @@ function toggleExpand() {
     const tasksParent = document.querySelector(".tasks");
     const mainParent = document.querySelector(".main"); 
 
+
     if (expanded === true) {
         expandButton.setAttribute("src", expandIcons[0]);
         expanded = false; 
-        tasksParent.classList.remove("tasks-collapsed");
-        mainParent.style.width = "50rem";
+        mainParent.style.width = "735px";
 
     }
     else {
         expandButton.setAttribute("src", expandIcons[1]);
         expanded = true; 
-        tasksParent.classList.add("tasks-collapsed");
-        mainParent.style.width = "22.5rem";
+        mainParent.style.width = "276px";
     }
 
     activeTab.renderTasks();
@@ -730,7 +738,7 @@ newTaskButton.addEventListener("click", () => taskFormPopup());
 
 
 // set visibility 
-let visible = true; 
+let visible = false; 
 const visibilityButton = document.querySelector(".visibility");
 visibilityButton.addEventListener("click", () => toggleVisibility());
 
@@ -770,7 +778,12 @@ let activeTab;
     new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
     new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
     new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
-    new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
+    // new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
+    // new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
+    // new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
+    // new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
+    // new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
+    // new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
 })();
 
 dashboardTabList[0].setFocus();
