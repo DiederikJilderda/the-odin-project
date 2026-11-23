@@ -189,7 +189,7 @@ class HighlightTab extends DashboardTab {
         }
         
         // Today
-        else if (this.projectName === "Today") {
+        else if (this.projectName === "Due today") {
             for (const task of taskList) {
                 if (task.due === today()) {
                     filteredTasks.push(task);
@@ -198,7 +198,7 @@ class HighlightTab extends DashboardTab {
         }
 
         // Priority 
-        else if (this.projectName === "Priority") {
+        else if (this.projectName === "High priority") {
             for (const task of taskList) {
                 if (task.priority === "high") {
                     filteredTasks.push(task);
@@ -257,7 +257,7 @@ class Task {
         this.completed = false; 
 
         taskList.push(this);
-        this.createCardDisplay();
+        activeTab.renderTasks();
     }
 
     // method: create UI 
@@ -580,6 +580,13 @@ function taskFormPopup() {
                         prioritySelect.classList.add("modal-priority");
                         prioritySelect.setAttribute("id", "priority-input");
 
+                            const optionPriorityDefault = document.createElement("option");
+                            optionPriorityDefault.hidden = true; 
+                            optionPriorityDefault.defaultSelected = true; 
+                            optionPriorityDefault.disabled = true; 
+                            optionPriorityDefault.textContent = "select priority";
+                            optionPriorityDefault.value = "low";
+
                             const optionPriorityLow = document.createElement("option"); 
                             optionPriorityLow.setAttribute("value", "low");
                             optionPriorityLow.textContent = "Low";
@@ -592,7 +599,7 @@ function taskFormPopup() {
                             optionPriorityHigh.setAttribute("value", "high");
                             optionPriorityHigh.textContent = "High";
 
-                        prioritySelect.append(optionPriorityLow, optionPriorityMedium, optionPriorityHigh);
+                        prioritySelect.append(optionPriorityDefault, optionPriorityLow, optionPriorityMedium, optionPriorityHigh);
 
                     priorityUnit.append(priorityHeader, prioritySelect);
 
@@ -765,19 +772,19 @@ let activeTab;
 (function() {
     // Highlights 
     new HighlightTab("All");
-    new HighlightTab("Today");
-    new HighlightTab("Priority");
+    new HighlightTab("Due today");
+    new HighlightTab("High priority");
 
     // Projects 
     newProjectHandler("Home");
     newProjectHandler("Work");
-    newProjectHandler("Sport");
+    newProjectHandler("Social");
 
     // Tasks 
-    new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
-    new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
-    new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
-    new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
+    // new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
+    // new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
+    // new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
+    // new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
     // new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
     // new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
     // new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
