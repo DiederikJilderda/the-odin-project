@@ -1,6 +1,7 @@
 // import logoImg from "./images/logo.png";
 // import highlightsImg from "./images/today.png";
 // import projectsImg from "./images/projects.png";
+
 // import "./styles.css";
 
 
@@ -462,8 +463,22 @@ class Task {
 }
 
 
+// Storage functions 
+function loadTabs() {
 
-//// Global functions 
+    
+    if (!localStorage.getItem("bgcolor")) {
+        populateStorage();
+    } 
+    
+    else {
+        setStyles();
+    }
+
+    return JSON.parse(localStorage.getItem(localStorage.getItem("dashboardTabsList")));
+}
+
+// Global functions 
 function today() {
     const getDate = new Date();
     const today = getDate.getFullYear() + "-" + (getDate.getMonth()+1) + "-" + getDate.getDate();
