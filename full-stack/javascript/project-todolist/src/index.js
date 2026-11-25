@@ -5,13 +5,15 @@
 // import "./styles.css";
 
 
+
 class DashboardTab {
     constructor() {
         this.totalElement = null; 
         this.dashboardElement = null; 
-    }
 
-    // create project UI display  
+        // updateStorageTabs();
+    }
+    // create project UI display 
     newProjectDisplay(parentNode) {
         // query parent element 
         const dashboard = document.querySelector(parentNode);                              // set parent container 
@@ -56,6 +58,7 @@ class DashboardTab {
             inputColor.addEventListener("click", (event) => {event.stopPropagation()});
             inputColor.addEventListener("change", () => {this.color = inputColor.value; 
                                                          activeTab.renderTasks();
+                                                         updateStorageTasks();
                                                         });
         }
 
@@ -69,7 +72,10 @@ class DashboardTab {
 
             newDashboardTab.append(projectDeleteButton); 
 
-            projectDeleteButton.addEventListener("click", (event) => this.deleteDashboardTab(event));
+            projectDeleteButton.addEventListener("click", (event) => {  this.deleteDashboardTab(event);
+                                                                        // updateStorageTabs();
+                                                                        }
+                                                                     );
         }
 
         // attach event listeners
@@ -100,6 +106,9 @@ class DashboardTab {
         
         // block tab click function execution 
         event.stopPropagation();
+
+        // update local storage 
+        // updateStorageTabs();
     }
 
     renderTasks() {
@@ -107,14 +116,14 @@ class DashboardTab {
         this.updateMainTitle();
 
         const filteredTasks = this.filterTasks();
-        let taskList = [];
+        let allTasks = [];
 
         if (visible === true) {
-            taskList = filteredTasks;
+            allTasks = filteredTasks;
         }
 
         else {
-            taskList = filteredTasks.filter( (task) => task.completed === false);
+            allTasks = filteredTasks.filter( (task) => task.completed === false);
         }
 
         this.createTaskDisplays(taskList);
@@ -158,6 +167,7 @@ class DashboardTab {
     }
 
     updateDashboardNumbers() {
+        // console.log(dashboardTabList);
         for (const tab of dashboardTabList) {
             let totalTasks = 0; 
 
@@ -259,6 +269,8 @@ class Task {
 
         taskList.push(this);
         activeTab.renderTasks();
+
+        updateStorageTasks();
     }
 
     // method: create UI 
@@ -291,6 +303,7 @@ class Task {
                     titleInput.value = this.title;                                                      // task title 
                     titleInput.addEventListener("change", () => {this.title = titleInput.value; 
                                                                 activeTab.updateDashboardNumbers();
+                                                                updateStorageTasks();
                                                             });
                     titleInput.addEventListener("keydown",(event) => {if (event.key === "Enter" || event.key === "Escape") {
                                                                         titleInput.blur();}
@@ -302,7 +315,8 @@ class Task {
                     deleteButton.textContent = "\u00d7";
 
                     deleteButton.addEventListener("click", (event) => { this.deleteTask(event);
-                                                    activeTab.updateDashboardNumbers();
+                                                                        activeTab.updateDashboardNumbers();
+                                                                        updateStorageTasks();
                                                 });
 
                 header.append(checkbox, titleInput, deleteButton);
@@ -328,6 +342,7 @@ class Task {
                                                                                     this.project = dashboardTabList[index];
                                                                                     activeTab.updateDashboardNumbers();
                                                                                     activeTab.renderTasks();
+                                                                                    updateStorageTasks();
                                                                                 });
                             projectUnit.append(projectHeader, projectInput);
 
@@ -346,6 +361,7 @@ class Task {
                                 dueInput.addEventListener("change", () => {this.due = dueInput.value;
                                                                             activeTab.updateDashboardNumbers();
                                                                             activeTab.renderTasks();
+                                                                            updateStorageTasks();
                                                                         });
                                                                         
                             dueUnit.append(dueHeader, dueInput);
@@ -389,6 +405,7 @@ class Task {
                                 prioritySelect.addEventListener("change", () => {this.priority = prioritySelect.value; 
                                                                                 activeTab.updateDashboardNumbers();
                                                                                 activeTab.renderTasks();
+                                                                                updateStorageTasks();
                                                                             });
 
                             priorityUnit.append(priorityHeader, prioritySelect);
@@ -411,6 +428,7 @@ class Task {
                                  
                                 notesInput.addEventListener("change", () =>     {this.notes = notesInput.value;
                                                                                     activeTab.updateDashboardNumbers();
+                                                                                    updateStorageTasks();
                                                                                 });
                                 notesInput.addEventListener("keydown",(event) => {if (event.key === "Enter" || event.key === "Escape") {
                                                                                     notesInput.blur();}
@@ -459,24 +477,10 @@ class Task {
         
         activeTab.updateDashboardNumbers();
         activeTab.renderTasks();
+        updateStorageTasks();
     }
 }
 
-
-// Storage functions 
-function loadTabs() {
-
-    
-    if (!localStorage.getItem("bgcolor")) {
-        populateStorage();
-    } 
-    
-    else {
-        setStyles();
-    }
-
-    return JSON.parse(localStorage.getItem(localStorage.getItem("dashboardTabsList")));
-}
 
 // Global functions 
 function today() {
@@ -485,7 +489,6 @@ function today() {
     
     return today; 
 }
-
 
 function dynamicProjectDropdown(project) {
     const projectInput = document.createElement("select");
@@ -506,7 +509,6 @@ function dynamicProjectDropdown(project) {
 
     return projectInput;
 }
-
 
 function taskFormPopup() {
     const body = document.querySelector("body");
@@ -656,27 +658,32 @@ function taskFormPopup() {
 
 }
 
-
-let dashboardTabList = [];
-let taskList = []; 
-function newProjectHandler(name) {
+function newProjectHandler(type, name) {
     if (name === "") {
         newProjectInput.focus();
     }
+
     else {
-        if (dashboardTabList.some( (tab) => tab.projectName === newProjectInput.value)) {
-            alert("Please use a unique project name");
-            newProjectInput.value = "";
+        if (type === "Project") {
+            if (dashboardTabList.some( (tab) => tab.projectName === newProjectInput.value)) {
+                alert("Please use a unique project name");
+                newProjectInput.value = "";
+            }
+
+            else {
+                new ProjectTab(name, projectColors[colorIndex]);
+                colorIndex++;
+                if (colorIndex > 5) {
+                    colorIndex = 0;
+                }
+                newProjectInput.value = "";
+            }
+        }
+        else if (type === "Highlight") {
+            new HighlightTab(name)
         }
 
-        else {
-            new ProjectTab(name, projectColors[colorIndex]);
-            colorIndex++;
-            if (colorIndex > 5) {
-                colorIndex = 0;
-            }
-            newProjectInput.value = "";
-        }
+        // updateStorageTabs();
     }
 }
 
@@ -693,6 +700,8 @@ function newTaskHandler() {
     new Task(taskProject, taskTitle, taskDate, taskPriority, taskNotes);
     activeTab.updateDashboardNumbers();
     document.querySelector(".modal-background").remove();
+
+    updateStorageTasks(); 
 }
 
 
@@ -740,11 +749,11 @@ function toggleExpand() {
 const newProjectInput = document.querySelector("#input-new-project"); 
 const newProjectButton = document.querySelector(".button-new-project");
 
-newProjectButton.addEventListener("click", () => newProjectHandler(newProjectInput.value));
+newProjectButton.addEventListener("click", () => newProjectHandler("Project", newProjectInput.value));
 document.addEventListener("keydown", (event) => {
     // enter: create new project 
     if (event.key === "Enter" && document.activeElement === newProjectInput) {
-        newProjectHandler(newProjectInput.value);
+        newProjectHandler("Project", newProjectInput.value);
     }
     // escape: unfocus and clear project input field 
     if (event.key === "Escape" && document.activeElement === newProjectInput) {
@@ -781,19 +790,50 @@ const projectColors =   [
                         ]
 let colorIndex = 0; 
 
+
+//storage handlers 
+function readStorageTabs() {
+    let tabList = JSON.parse(localStorage.getItem("dashboardTabList"));
+    return tabList === null ? [] : tabList;
+}
+
+function updateStorageTabs() {
+    localStorage.removeItem("dashboardTabList");
+    localStorage.setItem("dashboardTabList", JSON.stringify(dashboardTabList));
+}
+
+function readStorageTasks() {
+    let list = JSON.parse(localStorage.getItem("taskList"));
+    console.log(list);
+    return list === null ? [] : list;
+}
+
+function updateStorageTasks() {
+    localStorage.removeItem("taskList");
+    localStorage.setItem("taskList", JSON.stringify(taskList));
+}
+
+
+
+
 // initialise starting projects and tasks 
+let dashboardTabList = [];
+// let taskList = []; 
+
+// let dashboardTabList = readStorageTabs();
+let taskList = readStorageTasks();
 let activeTab;
 
 (function() {
     // Highlights 
-    new HighlightTab("All");
-    new HighlightTab("Due today");
-    new HighlightTab("High priority");
+    newProjectHandler("Highlight", "All");
+    newProjectHandler("Highlight", "Due today");
+    newProjectHandler("Highlight", "High priority");
 
     // Projects 
-    newProjectHandler("Home");
-    newProjectHandler("Work");
-    newProjectHandler("Social");
+    newProjectHandler("Project", "Home");
+    newProjectHandler("Project", "Work");
+    newProjectHandler("Project", "Social");
 
     // Tasks 
     // new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
