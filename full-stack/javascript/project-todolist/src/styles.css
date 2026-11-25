@@ -55,7 +55,6 @@ body {
 }
 
 .sidebar {
-    height: auto;
     width: 18.0rem; 
     display: flex;
     flex-direction: column;
@@ -207,8 +206,13 @@ img {
     &:focus {
         background-color: white;
         color: var(--grey50);
-        outline: none; 
-        border: solid 2.00px var(--grey50);
+        outline: solid 2px var(--grey50);
+        outline-offset: -2.5px;
+    }
+
+    &:hover {
+        outline: 2px solid var(--grey50);
+        outline-offset: -2.5px;
     }
 }
 
@@ -248,6 +252,8 @@ img {
 
     &:hover {
         cursor: pointer;
+        outline: 2px solid var(--grey50);
+        outline-offset: -2.5px;
     }
 
     &::after {
@@ -291,6 +297,7 @@ img {
     font-size: 2.75rem; 
     color: var(--darkblue);
     margin-bottom: 2rem; 
+    margin-top: 0.25rem;
     border-bottom: 3px solid var(--lightblue);
 }
 
@@ -353,7 +360,7 @@ img {
 
 .tasks {
     display: flex;
-    height: auto;
+    height: 378px;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 2.0rem;
@@ -525,9 +532,10 @@ img {
     height: 16.5rem;
     width: 20rem; 
     background: white;
-    border-style: solid;
-    border-width: 3px;
-    border-color: var(--darkblue);
+    /* border-style: solid;
+    border-width: 4px;
+    border-color: var(--lightblue); */
+    border: none;
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
 }
@@ -549,7 +557,7 @@ img {
 .modal-title {
     font-size: 16px;
     font-weight: bold;
-    padding: 0.35rem;
+    padding: 0.4rem;
     color: var(--grey50);
     background-color: var(--lightblue);
     border: none; 
@@ -558,16 +566,16 @@ img {
     margin-left: -5px;
 
     &:hover {
-        border: 2px dotted var(--darkblue);
+        outline: 2px dotted var(--darkblue);
+        /* color: var(--lightblue); */
     }
 
     &:focus {
         background: var(--grey245); 
         font-weight: normal;
         color: var(--grey50);
-        border: 2px solid var(--darkblue);
+        /* outline: 1.5px solid var(--darkblue); */
         outline: none; 
-        
     }
 
     &::placeholder {

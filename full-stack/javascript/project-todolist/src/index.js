@@ -58,7 +58,6 @@ class DashboardTab {
             inputColor.addEventListener("click", (event) => {event.stopPropagation()});
             inputColor.addEventListener("change", () => {this.color = inputColor.value; 
                                                          activeTab.renderTasks();
-                                                         updateStorageTasks();
                                                         });
         }
 
@@ -72,8 +71,7 @@ class DashboardTab {
 
             newDashboardTab.append(projectDeleteButton); 
 
-            projectDeleteButton.addEventListener("click", (event) => {  this.deleteDashboardTab(event);
-                                                                        // updateStorageTabs();
+            projectDeleteButton.addEventListener("click", (event) => {  this.deleteDashboardTab(event)
                                                                         }
                                                                      );
         }
@@ -106,9 +104,6 @@ class DashboardTab {
         
         // block tab click function execution 
         event.stopPropagation();
-
-        // update local storage 
-        // updateStorageTabs();
     }
 
     renderTasks() {
@@ -269,8 +264,6 @@ class Task {
 
         taskList.push(this);
         activeTab.renderTasks();
-
-        updateStorageTasks();
     }
 
     // method: create UI 
@@ -303,7 +296,6 @@ class Task {
                     titleInput.value = this.title;                                                      // task title 
                     titleInput.addEventListener("change", () => {this.title = titleInput.value; 
                                                                 activeTab.updateDashboardNumbers();
-                                                                updateStorageTasks();
                                                             });
                     titleInput.addEventListener("keydown",(event) => {if (event.key === "Enter" || event.key === "Escape") {
                                                                         titleInput.blur();}
@@ -316,7 +308,6 @@ class Task {
 
                     deleteButton.addEventListener("click", (event) => { this.deleteTask(event);
                                                                         activeTab.updateDashboardNumbers();
-                                                                        updateStorageTasks();
                                                 });
 
                 header.append(checkbox, titleInput, deleteButton);
@@ -342,7 +333,6 @@ class Task {
                                                                                     this.project = dashboardTabList[index];
                                                                                     activeTab.updateDashboardNumbers();
                                                                                     activeTab.renderTasks();
-                                                                                    updateStorageTasks();
                                                                                 });
                             projectUnit.append(projectHeader, projectInput);
 
@@ -361,7 +351,6 @@ class Task {
                                 dueInput.addEventListener("change", () => {this.due = dueInput.value;
                                                                             activeTab.updateDashboardNumbers();
                                                                             activeTab.renderTasks();
-                                                                            updateStorageTasks();
                                                                         });
                                                                         
                             dueUnit.append(dueHeader, dueInput);
@@ -405,7 +394,6 @@ class Task {
                                 prioritySelect.addEventListener("change", () => {this.priority = prioritySelect.value; 
                                                                                 activeTab.updateDashboardNumbers();
                                                                                 activeTab.renderTasks();
-                                                                                updateStorageTasks();
                                                                             });
 
                             priorityUnit.append(priorityHeader, prioritySelect);
@@ -428,7 +416,6 @@ class Task {
                                  
                                 notesInput.addEventListener("change", () =>     {this.notes = notesInput.value;
                                                                                     activeTab.updateDashboardNumbers();
-                                                                                    updateStorageTasks();
                                                                                 });
                                 notesInput.addEventListener("keydown",(event) => {if (event.key === "Enter" || event.key === "Escape") {
                                                                                     notesInput.blur();}
@@ -477,7 +464,6 @@ class Task {
         
         activeTab.updateDashboardNumbers();
         activeTab.renderTasks();
-        updateStorageTasks();
     }
 }
 
@@ -682,8 +668,6 @@ function newProjectHandler(type, name) {
         else if (type === "Highlight") {
             new HighlightTab(name)
         }
-
-        // updateStorageTabs();
     }
 }
 
@@ -700,8 +684,6 @@ function newTaskHandler() {
     new Task(taskProject, taskTitle, taskDate, taskPriority, taskNotes);
     activeTab.updateDashboardNumbers();
     document.querySelector(".modal-background").remove();
-
-    updateStorageTasks(); 
 }
 
 
@@ -818,10 +800,10 @@ function updateStorageTasks() {
 
 // initialise starting projects and tasks 
 let dashboardTabList = [];
-// let taskList = []; 
+let taskList = []; 
 
 // let dashboardTabList = readStorageTabs();
-let taskList = readStorageTasks();
+// let taskList = readStorageTasks();
 let activeTab;
 
 (function() {
@@ -836,16 +818,16 @@ let activeTab;
     newProjectHandler("Project", "Social");
 
     // Tasks 
-    // new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
-    // new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
-    // new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
-    // new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
-    // new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
-    // new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
-    // new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
-    // new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
-    // new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
-    // new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
+    new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
+    new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
+    new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
+    new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
+    new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
+    new Task(dashboardTabList[3], "Task 01", "2026-11-21", "low", "some notes");
+    new Task(dashboardTabList[3], "Task 02", "2026-11-22", "high", "some notes");
+    new Task(dashboardTabList[4], "Task 03", "2026-11-21", "medium", "some notes");
+    new Task(dashboardTabList[5], "Task 04", "2026-12-23", "low", "some notes");
+    new Task(dashboardTabList[4], "Task 05", "2026-11-23", "high", "some notes");
 })();
 
 dashboardTabList[0].setFocus();
