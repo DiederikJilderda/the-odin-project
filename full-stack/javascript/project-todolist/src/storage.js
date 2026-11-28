@@ -23,4 +23,4 @@ function updateStorageTasks() {
 
 let dashboardTabList = [];
 
-export { dashboardTabList };
+export { dashboardTabList }; 

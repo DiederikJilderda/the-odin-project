@@ -2,12 +2,15 @@
 
 import { staticLayout } from "./static-layout.js";
 
+// import { initialiseGlobalStates } from "./globalStates.js"; 
+// let globalStates = initialiseGlobalStates();
+
 // import { storage } from "./storage.js";
 
 // import { DashboardTab, HighlightTab, ProjectTab } from "./class-tab.js";
 // import { Task } from "./class-task.js";
 
-// import { GlobalSettings } from "./global-settings.js";
+// import { globalStates } from "./states.js";
 
 // import { newProjectHandler } from "./handler-project.js"; 
 // import { newTaskHandler } from "./handler-task.js";

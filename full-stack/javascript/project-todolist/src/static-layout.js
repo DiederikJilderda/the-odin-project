@@ -2,21 +2,37 @@
 // import todayImg from "./images/today.png";
 // import projectsImg from "./images/projects.png";
 // import expandImg from "./images/expanded.png";
-// import visibleImg from "./images/visibility/hidden grey200.png"; 
+// import collapseImg from "./images/collapsed.png"; 
+// import hiddenImg from "./images/visibility/hidden grey200.png";
+// import visibleImg from "./images/visibility/visible grey70.png";
 
 // Import images 
 const logoImg = "./images/logo.png";
 const todayImg = "./images/today.png";
 const projectsImg = "./images/projects.png";
+
 const expandImg = "./images/expanded.png";
-const visibleImg = "./images/visibility/hidden grey200.png"; 
+const collapseImg = "./images/collapsed.png"; 
+
+const hiddenImg = "./images/visibility/hidden grey200.png";
+const visibleImg = "./images/visibility/visible grey70.png";
+
+const expandIcons = [expandImg, collapseImg];
+const visibilityIcons = [hiddenImg, visibleImg]; 
+
+
 
 // Import event functions 
 import { dummy } from "./dummy.js"; 
-// new project 
-// new task 
-// toggle visible 
-// toggle expand 
+
+import { initialiseGlobalStates } from "./globalStates.js"; 
+let globalStates = initialiseGlobalStates();
+
+import { toggleExpand } from "./toggle-expand.js"; 
+import { toggleVisibility } from "./toggle-visibility.js";
+
+// import tabs list 
+let dashboardTabList = [];
 
 export function staticLayout() {
     const body = document.querySelector("body"); 
@@ -24,7 +40,6 @@ export function staticLayout() {
     // Sidebar 
         const sidebar = document.createElement("div"); 
         sidebar.classList.add("sidebar"); 
-
 
         // Logo 
             const logo = document.createElement("img"); 
@@ -81,12 +96,10 @@ export function staticLayout() {
                 const newProjectInput = document.createElement("input"); 
                 newProjectInput.type = "text"; 
                 newProjectInput.id = "input-new-project"; 
-                newProjectInput.setAttribute("placeholder", "New category");
+                newProjectInput.setAttribute("placeholder", "Add category");
                 newProjectInput.addEventListener("keydown", (event) => {
-                    if (event.key === "Enter" && newProjectInput.value != "") {
-                        dummy("new project through input enter");
-                        // newProjectHandler("Project", newProjectInput.value);
-                        newProjectInput.value = "";
+                    if (event.key === "Enter") {
+                        newProjectButton.click();
                     }
 
                     if (event.key === "Escape") {
@@ -105,8 +118,20 @@ export function staticLayout() {
                     }
 
                     else {
-                        dummy("new project through button");
-                        // newProjectHandler("Project", newProjectInput.value);
+                        // if (dashboardTabList.some( (tab) => tab.projectName.toLowerCase() === newProjectInput.value.toLowerCase())) {
+                        if (dashboardTabList.some( (tab) => tab.toLowerCase() === newProjectInput.value.toLowerCase())) {
+                            alert("Please use a unique project name");
+                            newProjectInput.value = "";
+                        }
+
+                        else {
+                            dummy("new project through button");
+                            dashboardTabList.push(newProjectInput.value);
+                            console.log(dashboardTabList);
+
+                            // new ProjectTab(name, projectColors[colorIndex]);
+                        }
+                        
                         newProjectInput.value = "";
                     }
                 }); 
@@ -131,18 +156,18 @@ export function staticLayout() {
                 mainKey.classList.add("main-key"); 
 
                     const expand = document.createElement("img");
-                    expand.src = expandImg;
+                    globalStates.expanded === true ? expand.src = expandIcons[0] : expand.src = expandIcons[1];
                     expand.title = "Collapse/expand tasks"; 
                     expand.classList.add("expand");
-                    expand.addEventListener("click", () => dummy("toggled expansion"));
-                    // expand.addEventListener("click", () => toggleExpand());
+                    // expand.addEventListener("click", () => dummy("toggled expansion"));
+                    expand.addEventListener("click", () => toggleExpand());
 
                     const visible = document.createElement("img");
-                    visible.src = visibleImg; 
+                    globalStates.visible === false ? visible.src = visibilityIcons[0] : visible.src = visibilityIcons[1];
                     visible.title = "Toggle completed task visibility"; 
                     visible.classList.add("visibility");
-                    visible.addEventListener("click", () => dummy("toggled visibility"));
-                    // visible.addEventListener("click", () => toggleVisibility());
+                    // visible.addEventListener("click", () => dummy("toggled visibility"));
+                    visible.addEventListener("click", () => toggleVisibility());
 
                 mainKey.append(expand, visible);
             
